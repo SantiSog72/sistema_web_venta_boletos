@@ -3,49 +3,40 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 require_once BASE_PATH.'MODELO/Ruta.class.php';
 class Viaje {
 
-    private string $nro_viaje;
-    private string $fecha_hora_arrivo;
-    private string $fecha_hora_estimada_llegada;
+    private int $nro_viaje;
     private Ruta $ruta;
-
-
-    public function __construct($nro_viaje, $ruta, $fecha_hora_arrivo, $fecha_hora_arrivo) {
+    private string $fecha_viaje;
+    private string $fecha_llegada;
+ 
+    public function __construct($nro_viaje, $ruta, $fecha_viaje, $fecha_llegada) {
         $this->nro_viaje = $nro_viaje;
         $this->ruta = $ruta;
-        $this->fecha_hora_arrivo = $fecha_hora_arrivo;
-        $this->fecha_hora_arrivo = $fecha_hora_arrivo;
+        $this->fecha_viaje = $fecha_viaje;
+        $this->fecha_llegada = $fecha_llegada;
     }
 
-    public function get_nro_viaje(): string {
+    public function get_nro_viaje() {
         return $this->nro_viaje;
     }
 
-    public function get_lugar_destino(): string {
-        return $this->lugar_destino;
+    public function get_fecha_viaje() {
+        return $this->fecha_viaje;
     }
 
-    public function get_lugar_origen(): string {
-        return $this->lugar_origen;
+    public function get_fecha_llegada() {
+        return $this->fecha_llegada;
     }
 
-    public function get_frecuencia_salidas_diarias(): array {
-        return $this->frecuencia_salidas_diarias;
-    }
-
-    public function get_tramos(): array {
-        return $this->tramos;
-    }
-
-    public function get_tarifa_normal(): float {
-        return $this->tarifa_normal;
+    public function get_ruta(): Ruta {
+        return $this->ruta;
     }
 
     public function get_tarifa_promocional(): float {
-        return ($this->tarifa_normal*(30/100));
+        return ($this->get_ruta()->get_tarifa_normal()*(30/100));
     }
 
     public function get_tarifa_ejecutiva(): float {
-        return ($this->tarifa_normal*(200/100));
+        return ($this->get_ruta()->get_tarifa_normal()*(200/100));
     }
 }
 ?>

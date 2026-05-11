@@ -95,19 +95,19 @@ class ConexionBDD {
     //     return $consulta->execute();
     // }
 
-    // public function obtener_usuario ($dni_usuario){
-    //     $consulta = $this -> conexion -> prepare("
-    //         SELECT *
-    //         FROM usuario_administrador ua
-    //         WHERE ua.dni = ?
-    //     ");
-    //     $consulta -> bind_param("s", $dni_usuario);
-    //     $consulta -> execute();
-    //     $resultado = $consulta -> get_result();
-    //     $usuario = $resultado -> fetch_assoc();
-    //     $resultado->free();
-    //     return $usuario;
-    // }
+    public function obtener_usuario ($dni_usuario){
+        $consulta = $this -> conexion -> prepare("
+            SELECT *
+            FROM usuario u
+            WHERE u.dni = ?
+        ");
+        $consulta -> bind_param("s", $dni_usuario);
+        $consulta -> execute();
+        $resultado = $consulta -> get_result();
+        $usuario = $resultado -> fetch_assoc();
+        $resultado->free();
+        return $usuario;
+    }
 
     public function __destruct() {
         if ($this->conexion != null) {

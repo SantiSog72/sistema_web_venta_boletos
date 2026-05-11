@@ -1,71 +1,89 @@
 <?php
 // Esto busca el archivo desde la raíz de tu htdocs/www
 require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="autor" content="Santiago Servin">
-<meta name="description" content="Pagina principal">
+<meta name="description" content="Pagina ingreso">
 <script>
     window.BASE_URL = "<?= WEB_ROOT ?>";
 </script>
-
 <script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/botones_hipervinculo.js"></script>
-<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/ubicador_elementos.js"></script>
-<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/renderizador.js"></script>
-
+<!-- <script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/libreria_js/ubicador_elementos.js"></script> -->
 
 <script>
-	document.addEventListener('DOMContentLoaded', function () {//DOMContentLoaded: evento que se produce al cargar la pagina
-	
-	async function cargarRutas() {
-		try {
-			const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/Procesa_cargarRutas.php');
-			const lista_rutas = await respuesta.json();
+    document.addEventListener('DOMContentLoaded', function (){
+        const formulario_ingreso = document.getElementById("id_fomr_ingreso");
+        
+        formulario_ingreso.addEventListener('submit', async function(evento) {
+			evento.preventDefault(); 
 
+			const datos = new FormData(formulario_ingreso);
+			console.log (datos);
 
-			renderizarTablaRutaJSON(lista_rutas);
+			try {
+				const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/ProcesaingresoUsuario.php', {
+					method: 'POST',
+					body: datos
+				});
 
-				//combierte el json en string, luego guarda catalogo en local storage
-				// localStorage.setItem("catalogo_actual", JSON.stringify(lista_rutas));
-				
-				// renderizarTarjetasJSON(lista_rutas);
+				const resultado = await respuesta.json();
+
+				if (resultado.exito) {
+					console.log(resultado);
+					ir_paginaRutas();
+				} else {
+					alert("Error: " + resultado.mensaje);
+				}
 			} catch (error) {
-				console.error("Error al cargar las rutas:", error);
-				contenedor.innerHTML = "<p>Error al cargar los datos.</p>";
+				console.error("Error en la conexión:", error);
 			}
-		}
-	cargarRutas(); 
-
-	});
-
+		});
+    })
 </script>
 
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/index.css">
-<link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/tabla.css">
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/formulario_estilos.css">
 
-<title>Sistema Venta de Boletos</title>
+<title>Sing In</title>
 </head>
-<!-- con el onload trae todo el catalogo para mostrar -->
-<body> 
+
+<body>
 	<header>
-	<h1>Venta de Boletos para Terminal de Colectivos</h1>
-	<nav class="contenedor_mapa">
-		<button class= "boton" onclick="ir_singIn();">Iniciar sesion</button>
-		<button class= "boton" onclick="ir_singUp();">registrarse</button>
-		<button class= "boton" onclick="">Mapa Catalogo Completo</button>
-		<button class= "boton" onclick="ocultarMapa()">Ocultar Mapa</button>
-	</nav>
+	<h1>Ingreso Usuario Administrador</h1>
 	</header>
-
-	<div id="id_contenedor_rutas">
-
-	</div>
-
+	<section>
+		<article class= "contenedor_formulario">
+			<form id="id_fomr_ingreso" class "formulario" method="POST">
+				<fieldset class = "fieldset" name="Singin">
+					
+					<span class="form_grupo">
+						<label class ="label" for ="id_dni">DNI: </label>						
+						<input id ="id_dni" type="text" name="dni" placeholder="ingrese su dni" value="12345678">
+						<span id="error_dni" class="error"></span>
+					</span>
+				
+					<span class="form_grupo">
+						<label class ="label" for ="id_contraseña">Contraseña: </label>
+						<input id ="id_contraseña" type="password" name="contrasena" maxlength="20" placeholder="ingrese su contraseña" value="12345678">
+						<span id="error_contraseña" class="error"></span>
+					</span>
+				</fieldset>
+				
+				
+				<fieldset class = "fieldset field_acciones" name="acciones_botones">
+					<button id="id_envio" class="boton" type ="submit">ingresar</button>
+					<button id="id_registrarse" class="boton" type ="button" onclick = "ir_singUp();">registrarse</button>
+					<!-- <button id="id_borrar" class="boton" type ="button" onclick="ir_index();">atras</button> -->
+				</fieldset>
+				
+			</form>
+		
+		</article>
+	</section>
 	<footer>
 	<div id="descripcion_pagina">
 		<p>autor: <span class="autor">Santiago Servin</span></p>
