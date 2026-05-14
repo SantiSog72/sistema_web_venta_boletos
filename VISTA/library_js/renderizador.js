@@ -58,15 +58,19 @@ function renderizar_info_ruta_seleccionada (cod_ruta_seleccionado, listaRutas){
     contenedor_datos_ruta.innerHTML = html_info_ruta;
 }
 
-function renderizar_seccion_mapas(){
-    const boton_siguiente = document.getElementById("id_siguiente");
+function renderizar_seccion_mapas(lista_asientos_ocupados){
+    const boton_siguiente = document.getElementById("id_siguiente_mapa_colectivo");
     boton_siguiente.setAttribute("onclick", "renderizar_entrada_pasajero();");
+    boton_siguiente.setAttribute("id", "id_siguiente_datos_pasajero");
 
     limpiar_contenedor("id_fomr_compra_boleto", "id_seccion_asiento_tarifa");
+
+    
 
     let html_seccion_mapa_asientos = `
     <fieldset id="id_seccion_asiento_tarifa" class="fieldset">
         <legend class = "legend" >Seleccione el Asiento/Tarifa</legend>
+        <input id="id_nro_asiento" type="hidden" name="nro_asiento" value="">
         <div id="id_mapa_colectivo">
             <div id="id_contenedor_asientos_planta_baja">
                 
@@ -217,10 +221,22 @@ function renderizar_seccion_mapas(){
     `;
 
     agregar_elemento_despues_de(html_seccion_mapa_asientos, "id_seccion_datos_viaje") ;
+
+    let lista_asientos = Array.from(document.getElementsByClassName("asiento"));
+
+    lista_asientos.forEach(asiento_viaje => {
+        lista_asientos_ocupados.forEach(asiento_ocupado => {
+            if (parseInt (asiento_viaje.textContent) == asiento_ocupado){
+                asiento_viaje.setAttribute("class", "tarjeta ocupado");
+            }
+        });    
+    });
+
+    
 }
 
 function renderizar_entrada_pasajero(){
-    const boton_siguiente = document.getElementById("id_siguiente");
+    const boton_siguiente = document.getElementById("id_siguiente_datos_pasajero");
     boton_siguiente.setAttribute("onclick", "validar_datos_pasajero() && renderizar_botones_formulario();");
 
     limpiar_contenedor("id_fomr_compra_boleto", "id_seccion_entrada_pasajero");

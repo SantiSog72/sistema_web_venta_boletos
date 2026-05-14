@@ -27,6 +27,10 @@ class ConexionBDD {
         return self::$instancia;
     }
 
+    public function getConexion(){
+        return $this -> conexion;
+    }
+
     // 
     
     // public function set_disponibilidad_alquiler ($nro_alquiler){
@@ -52,6 +56,23 @@ class ConexionBDD {
     // }
 
     public function obtener_rutas() {
+        $consulta = $this->conexion->prepare("
+            SELECT * FROM `ruta` r WHERE 1
+            ORDER BY r.lugar_origen, r.lugar_destino
+        ");
+        $consulta->execute();
+        $resultado = $consulta->get_result();
+        $lista = [];
+        while ($fila = $resultado->fetch_assoc()) {
+            $lista[] = $fila;
+        }
+
+        $resultado->free();
+        return $lista;
+    }
+
+
+    public function obtener_viaje($fecha_viaje, $cod_ruta) {
         $consulta = $this->conexion->prepare("
             SELECT * FROM `ruta` r WHERE 1
             ORDER BY r.lugar_origen, r.lugar_destino
