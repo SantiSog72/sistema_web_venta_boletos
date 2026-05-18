@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 "nombre_usuario" => $usuario_bdd['nombre_usuario'],
                 "primer_nombre" => $usuario_bdd['primer_nombre'],
                 "apellido" => $usuario_bdd['apellido'],
-                "es_usuario_frecuente" => true
+                "es_usuario_frecuente" => false
             ];
 
             // si es usuario frecuente
