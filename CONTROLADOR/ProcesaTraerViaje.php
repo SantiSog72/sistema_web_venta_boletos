@@ -14,20 +14,32 @@ $consulta -> bind_param("ss",
     $_POST['fecha_viaje'],
     $_POST['cod_ruta']
 );
+
 $consulta->execute();
 $resultado = $consulta->get_result();
+
 $lista = [];
-while ($fila = $resultado->fetch_assoc()) {
-    $lista[] = $fila['nro_asiento'];
+
+if ($resultado -> num_rows > 0){
+    while ($fila = $resultado->fetch_assoc()) {
+        $lista[] = $fila['nro_asiento'];
+    }
+}else{
+    //si no existe el viaje lo crea, el ignore es por si existe el viaje pero aun nadie compro
+    $consulta = $conexion->prepare("
+        INSERT IGNORE INTO viaje (fecha_viaje, cod_ruta)
+        VALUE (?,?);
+    ");
+
+    $consulta -> bind_param("ss", 
+        $_POST['fecha_viaje'],
+        $_POST['cod_ruta']
+    );
+    $consulta->execute();
+
 }
-
-
 $resultado->free();
-
-
 header('Content-Type: application/json');
 echo json_encode($lista);
 exit;
-
-
 ?>

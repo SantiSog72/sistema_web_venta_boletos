@@ -31,9 +31,11 @@ class ConexionBDD {
         return $this -> conexion;
     }
 
+ 
+
     // 
     
-    // public function set_disponibilidad_alquiler ($nro_alquiler){
+    // public function existe_viaje ($fecha_viaje, $cod_ruta){
     //     $consulta = $this -> conexion -> prepare("
     //     UPDATE alquiler a
     //     SET a.disponibilidad = 0
@@ -118,8 +120,8 @@ class ConexionBDD {
 
     public function obtener_usuario ($dni_usuario){
         $consulta = $this -> conexion -> prepare("
-            SELECT *
-            FROM usuario u
+            SELECT u.*, uf.puntos
+            FROM usuario u LEFT OUTER JOIN usuario_frecuente uf ON u.dni = uf.dni
             WHERE u.dni = ?
         ");
         $consulta -> bind_param("s", $dni_usuario);

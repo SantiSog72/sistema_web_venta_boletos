@@ -5,8 +5,13 @@
 #id_mapa_colectivo {
     display: flex;
     gap: 24px;
-    /* flex-wrap: wrap; */
-    /* padding: 12px; */
+    flex-wrap: wrap;
+    padding: 12px;
+    
+}
+
+#id_seccion_asiento_tarifa{
+    flex-direction: column;
 }
 
 /* Contenedor de cada planta */
@@ -108,7 +113,7 @@
     color: #bbb !important;
     border-color: #ddd !important;
     cursor: not-allowed;
-    text-decoration: line-through;
+    text-decoration: underline;
 }
 .tarjeta.asiento.ocupado:hover {
     transform: none;

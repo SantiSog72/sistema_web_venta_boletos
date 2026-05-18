@@ -15,13 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if ($usuario_bdd){
         if ($usuario_bdd['contrasena'] === $_POST['contrasena']){
+            
 
             $json_usuario = [
                 "dni" => $usuario_bdd['dni'],
                 "nombre_usuario" => $usuario_bdd['nombre_usuario'],
                 "primer_nombre" => $usuario_bdd['primer_nombre'],
-                "apellido" => $usuario_bdd['apellido']
+                "apellido" => $usuario_bdd['apellido'],
+                "es_usuario_frecuente" => true
             ];
+
+            // si es usuario frecuente
+            if (isset($usuario_bdd['puntos'])){
+                $json_usuario["es_usuario_frecuente"] = true;
+                $json_usuario["puntos"] = $usuario_bdd['puntos'];
+            }
 
             $json_respuesta = [
                 "exito" => true,

@@ -7,7 +7,20 @@ function borrar (){
 
 function cancelar (){
 	borrar();
-	ir_index();
+	ir_paginaRutas();
+}
+
+function validar_seleccion_asiento(){
+	let asiento =document.getElementById("id_nro_asiento");
+	let error_seleccion = document.getElementById("error_seleccion_asiento");
+
+	let valido_formulario = true;
+
+	if (!Validacion.realizar_validacion(Validacion.texto, asiento, error_seleccion)) {
+		valido_formulario = false;
+	}
+
+	return valido_formulario;
 }
 
 function validar_datos_viaje (){
@@ -59,25 +72,10 @@ function validar_datos_pasajero(){
 
 
 function validar_datos (){
-
-	let dni = document.getElementById("id_dni");
-	let error_dni = document.getElementById("error_dni");
-
-	let contraseña = document.getElementById("id_contraseña");
-	let error_contraseña = document.getElementById("error_contraseña");
-
-	let valido_formulario = true;
-
-	if (!Validacion.realizar_validacion(Validacion.contrasenaBasica, contraseña, error_contraseña)) {
-		valido_formulario = false;
-	}
-
-	if (!Validacion.realizar_validacion(Validacion.dni, dni, error_dni)) {
-		valido_formulario = false;
-	}
-
-	
-	return valido_formulario;
+	return (validar_datos_viaje() 
+		&& validar_seleccion_asiento() 
+		&& validar_datos_pasajero()
+	);
 }
 
 
@@ -86,13 +84,13 @@ function validar_datos (){
 
 
 
-function enviar_formulario (){
-	Validacion.limpiar_erorres();
-	formulario = document.getElementById("id_fomr_ingreso");
-	// console.log(formulario);
+// function enviar_formulario (){
+// 	Validacion.limpiar_erorres();
+// 	formulario = document.getElementById("id_fomr_compra_boleto");
+// 	// console.log(formulario);
 	
-	if (validar_datos()){
-		console.log("el Usuario se valido exitosamente");
-		formulario.submit();
-	}
-}
+// 	if (validar_datos()){
+// 		console.log("el Usuario se valido exitosamente");
+// 		formulario.submit();
+// 	}
+// }

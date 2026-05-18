@@ -29,19 +29,28 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 	document.addEventListener('DOMContentLoaded', function () {//DOMContentLoaded: evento que se produce al cargar la pagina
 		const formulario = document.getElementById('id_fomr_compra_boleto');
         const select_rutas = document.getElementById("id_cod_ruta");
-
-        const boton_siguiente_mapa_colectivo = document.getElementById("id_siguiente_mapa_colectivo");
-        const boton_siguiente_datos_pasajero = document.getElementById("id_siguiente_datos_pasajero");
-
-
-        
+        const fecha_seleccionada = document.getElementById("id_fecha_seleccionada");
+        const mapa_colectivo = document.getElementById("id_mapa_colectivo");
+        const precio_normal_selec = document.getElementById("id_precio_normal_asiento_seleccionado");
+        const tipo_tarifa_selec = document.getElementById("id_tipo_tarifa_asiento_seleccionado");
 
 
         //la lsita de rutas se recupera en forma de string
         const listaRutas_str = localStorage.getItem("Rutas_disponibles");
         const listaRutas = JSON.parse(listaRutas_str);
         
-        
+        function vista_asientos_ocupados(lista_asientos_ocupados){
+            let lista_asientos = Array.from(document.getElementsByClassName("asiento"));
+
+            lista_asientos.forEach(asiento_viaje => {
+                lista_asientos_ocupados.forEach(asiento_ocupado => {
+                    if (parseInt (asiento_viaje.textContent) == asiento_ocupado){
+                        asiento_viaje.setAttribute("class", "tarjeta ocupado");
+                    }
+                });    
+            });
+        }
+
         function opciones_rutas(listaRutas){
 
             listaRutas.forEach(item => {
@@ -55,124 +64,112 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 
         }
 
-		opciones_rutas(listaRutas);
-        renderizar_info_ruta_seleccionada (select_rutas.value, listaRutas);
-
-        select_rutas.addEventListener("change", function (){
-            renderizar_info_ruta_seleccionada (this.value, listaRutas)
-        });
-
-		// 3. CARGA POR BÚSQUEDA: Se ejecuta al enviar el formulario
-		formulario.addEventListener('submit', async function(evento) {
-			evento.preventDefault(); //evita que se recargue la pagina (que se envie el formulario)
-			const datos = new FormData(formulario);//recolecta la informacion del formulario que se estaba por enviar
-			const params = new URLSearchParams(datos).toString();//transforma la info del formualrio a un string para el servidor
-			//en un formato que el servidor entiede
-			
-			cargarCatalogo(params);
-		});
-
-		formulario.addEventListener('reset', async function(){
-			localStorage.removeItem("catalogo_actual");
-			cargarCatalogo();
-		});
-
-
-        boton_siguiente_mapa_colectivo.addEventListener("click", async function(){
-
+        async function actualizar_viaje(){
             if (validar_datos_viaje ()){
                 //en este caso no hay un envio de formulario pero aun asi necesita los
                 //datos del formulario
                 let fecha_viaje = document.getElementById("id_fecha_seleccionada").value;
                 let cod_ruta = document.getElementById("id_cod_ruta").value;
-                
+
                 let datos = new FormData();
                 datos.append("fecha_viaje", fecha_viaje);
                 datos.append("cod_ruta", cod_ruta);
+                
 
                 const respuesta = await fetch(
                     '<?= WEB_ROOT ?>CONTROLADOR/ProcesaTraerViaje.php',{
                         method:'POST',
                         body: datos
                     });
-                const lista_asientos_ocupados = await respuesta.json();
-                renderizar_seccion_mapas(lista_asientos_ocupados);
+                let lista_asientos_ocupados = await respuesta.json();
+                // console.log (lista_asientos_ocupados);
 
                 
-                let div_anterior = "";
-                let str_clases = "";
-                const mapa_colectivo = document.getElementById("id_mapa_colectivo");
-                if (mapa_colectivo){
-                    mapa_colectivo.addEventListener("click", function(evento){
-                        // si se clickea a un elemento que contiene en su lista de clases al aasiento
-                        if (evento.target.classList.contains("asiento")){
-                            const hidden_nro_asiento = document.getElementById("id_nro_asiento");
-                            const asiento_seleccionado =  parseInt(evento.target.textContent);
-                            console.log(asiento_seleccionado);
-                            hidden_nro_asiento.value = asiento_seleccionado;
-                            
-                            let lista_asientos = Array.from(document.getElementsByClassName("asiento"));
-                            
-                            let div_asiento_seleccionado = lista_asientos.find(asiento_viaje =>parseInt (asiento_viaje.textContent)=== asiento_seleccionado);
-                            
-                            // la primera vez no se devuelve a las clases anteriores porque no hay anterior
-                            if (div_anterior!=""){
-                                // añadir clases guardadas al elemnto anterior
-                                div_anterior.setAttribute("class", str_clases);
-                            }
-                            // guardar div anteior
-                            div_anterior = div_asiento_seleccionado;
-
-                            // guardar clases actuales
-                            str_clases = Array.from(div_asiento_seleccionado.classList).join(" ");
-                            // añadir clase seleccion
-                            div_asiento_seleccionado.setAttribute("class", "tarjeta asiento seleccionado");
-                            // console.log (str_clases_elemento_seleccionado);
-                        
-
-
-                            mapa_colectivo.addEventListener("focus", function(evento){
-
-                            });
-    
-                            mapa_colectivo.addEventListener("blur", function(evento){
-                            });
-                        }
-
-                    });
-
-
-                };
-                
-                
-                
-
-
+                vista_asientos_ocupados(lista_asientos_ocupados);
             }
+        }
+
+		opciones_rutas(listaRutas);
+        renderizar_info_ruta_seleccionada (select_rutas.value, listaRutas);
+        actualizar_viaje();
+
+        select_rutas.addEventListener("change", function (){
+            renderizar_info_ruta_seleccionada (this.value, listaRutas)
+        });
+
+		formulario.addEventListener('submit', async function(evento) {
+			evento.preventDefault(); //evita que se recargue la pagina (que se envie el formulario)
+            if (validar_datos()){
+                console.log ("el formulario se envio con exito");
+            }
+		});
+
+		// formulario.addEventListener('reset', async function(){
+		// 	localStorage.removeItem("catalogo_actual");
+		// 	cargarCatalogo();
+		// });
+        let div_anterior = "";
+        let str_clases = "";
+        mapa_colectivo.addEventListener("click", async function(evento){
+            // si se clickea a un elemento que contiene en su lista de clases al aasiento
+            if (evento.target.classList.contains("asiento")){
+                const hidden_nro_asiento = document.getElementById("id_nro_asiento");
+                const asiento_seleccionado =  parseInt(evento.target.textContent);
+                console.log(asiento_seleccionado);
+                hidden_nro_asiento.value = asiento_seleccionado;
+                
+                let lista_asientos = Array.from(document.getElementsByClassName("asiento"));
+                
+                let div_asiento_seleccionado = lista_asientos.find(asiento_viaje =>parseInt (asiento_viaje.textContent)=== asiento_seleccionado);
+                
+                // la primera vez no se devuelve a las clases anteriores porque no hay anterior
+                if (div_anterior!=""){
+                    // añadir clases guardadas al elemnto anterior
+                    div_anterior.setAttribute("class", str_clases);
+                }
+                // guardar div anteior
+                div_anterior = div_asiento_seleccionado;
+
+                // guardar clases actuales
+                str_clases = Array.from(div_asiento_seleccionado.classList).join(" ");
+                // añadir clase seleccion
+                div_asiento_seleccionado.setAttribute("class", "tarjeta asiento seleccionado");
+                // console.log (str_clases_elemento_seleccionado);
+
+                
+                // obtener tarifa y asiento
+                let datos = new FormData();
+                datos.append("nro_asiento", hidden_nro_asiento.value);
+                datos.append("cod_ruta", select_rutas.value);
+                
+
+                const respuesta = await fetch(
+                    '<?= WEB_ROOT ?>CONTROLADOR/Procesa_Tarifa_precioNormal.php',{
+                        method:'POST',
+                        body: datos
+                    });
+                let resultado = await respuesta.json();
+
+
+                tipo_tarifa_selec.textContent = "Tipo Tarifa: " + resultado.tipoTarifa;
+                precio_normal_selec.textContent = "Precio Normal: " + resultado.precioNormal;
+            }
+
         });
 
 
-        
-        
-        if (boton_siguiente_datos_pasajero){
-            boton_siguiente_datos_pasajero.addEventListener("click", async function(){
-                // validacion
-                if (document.getElementById("id_nro_asiento") != ""){
-                    null;
-    
-    
-                }
-    
-            });
-        };
 
 
 
+        // para que se actualice el viaje al cambiar la ruta o la fecha
+        fecha_seleccionada.addEventListener("change", async function(){
+            actualizar_viaje();
+        });
 
 
-		
-
-
+        select_rutas.addEventListener("change", async function(){
+            actualizar_viaje();
+        });
 	});
 
 </script>
@@ -209,9 +206,187 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
                 </span>
 
             </fieldset>
+
+            <fieldset id="id_seccion_asiento_tarifa" class="fieldset">
+                <legend class = "legend" >Seleccione el Asiento/Tarifa</legend>
+                <input id="id_nro_asiento" type="hidden" name="nro_asiento" value="">
+                <div id="id_mapa_colectivo">
+                    <div id="id_contenedor_asientos_planta_baja">
+                        
+                        <div class="tarjeta ES">ES</div>
+                        <div class="tarjeta ES">ES</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+
+                        <div class="tarjeta TV">TV</div>
+                        <div class="tarjeta WC">WC</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta PU">PU</div>
+
+                        <div class="tarjeta tarifa_ejecutiva asiento">49</div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">50</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">51</div>
+
+                        <div class="tarjeta tarifa_ejecutiva asiento">52</div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">53</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">54</div>
+
+                        <div class="tarjeta tarifa_ejecutiva asiento">55</div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">56</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">57</div>
+
+                        <div class="tarjeta tarifa_ejecutiva asiento">58</div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">59</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_ejecutiva asiento">60</div>
+
+                    </div>
+
+                    <div id="id_contenedor_asientos_planta_alta">
+
+                        <!-- FILA 1 — normal -->
+                        <div class="tarjeta tarifa_normal asiento">1</div>
+                        <div class="tarjeta tarifa_normal asiento">2</div>
+                        <div class="tarjeta TV">TV</div>
+                        <div class="tarjeta tarifa_normal asiento">3</div>
+                        <div class="tarjeta tarifa_normal asiento">4</div>
+
+                        <!-- FILA 2 — normal -->
+                        <div class="tarjeta tarifa_normal asiento">5</div>
+                        <div class="tarjeta tarifa_normal asiento">6</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta ES">ES</div>
+
+                        <!-- FILA 3 — normal -->
+                        <div class="tarjeta tarifa_normal asiento">7</div>
+                        <div class="tarjeta tarifa_normal asiento">8</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta ES">ES</div>
+
+                        <!-- FILA 4 — normal -->
+                        <div class="tarjeta tarifa_normal asiento">9</div>
+                        <div class="tarjeta tarifa_normal asiento">10</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_normal asiento">11</div>
+                        <div class="tarjeta tarifa_normal asiento">12</div>
+
+                        <!-- FILA 5 — normal -->
+                        <div class="tarjeta tarifa_normal asiento">13</div>
+                        <div class="tarjeta tarifa_normal asiento">14</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_normal asiento">15</div>
+                        <div class="tarjeta tarifa_normal asiento">16</div>
+
+                        <!-- FILA 6 — normal -->
+                        <div class="tarjeta tarifa_normal asiento">17</div>
+                        <div class="tarjeta tarifa_normal asiento">18</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_normal asiento">19</div>
+                        <div class="tarjeta tarifa_normal asiento">20</div>
+
+                        <!-- FILA 7 — promocional -->
+                        <div class="tarjeta tarifa_promocional asiento">21</div>
+                        <div class="tarjeta tarifa_promocional asiento">22</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_promocional asiento">23</div>
+                        <div class="tarjeta tarifa_promocional asiento">24</div>
+
+                        <!-- FILA 8 — promocional -->
+                        <div class="tarjeta tarifa_promocional asiento">25</div>
+                        <div class="tarjeta tarifa_promocional asiento">26</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_promocional asiento">27</div>
+                        <div class="tarjeta tarifa_promocional asiento">28</div>
+
+                        <!-- FILA 9 — promocional -->
+                        <div class="tarjeta tarifa_promocional asiento">29</div>
+                        <div class="tarjeta tarifa_promocional asiento">30</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_promocional asiento">31</div>
+                        <div class="tarjeta tarifa_promocional asiento">32</div>
+
+                        <!-- FILA 10 — promocional -->
+                        <div class="tarjeta tarifa_promocional asiento">33</div>
+                        <div class="tarjeta tarifa_promocional asiento">34</div>
+                        <div class="tarjeta TV">TV</div>
+                        <div class="tarjeta tarifa_promocional asiento">35</div>
+                        <div class="tarjeta tarifa_promocional asiento">36</div>
+
+                        <!-- FILA 11 — promocional -->
+                        <div class="tarjeta tarifa_promocional asiento">37</div>
+                        <div class="tarjeta tarifa_promocional asiento">38</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_promocional asiento">39</div>
+                        <div class="tarjeta tarifa_promocional asiento">40</div>
+
+                        <!-- FILA 12 — promocional -->
+                        <div class="tarjeta tarifa_promocional asiento">41</div>
+                        <div class="tarjeta tarifa_promocional asiento">42</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_promocional asiento">43</div>
+                        <div class="tarjeta tarifa_promocional asiento">44</div>
+
+                        <!-- FILA 13 — promocional -->
+                        <div class="tarjeta tarifa_promocional asiento">45</div>
+                        <div class="tarjeta tarifa_promocional asiento">46</div>
+                        <div class="tarjeta vacio"></div>
+                        <div class="tarjeta tarifa_promocional asiento">47</div>
+                        <div class="tarjeta tarifa_promocional asiento">48</div>
+
+                    </div>
+
+                </div>
+
+                <span class="form_grupo" id="id_contenedor_datos_asiento_seleccionado">
+                    <span id="error_seleccion_asiento" class="error"></span>
+                    <p id="id_tipo_tarifa_asiento_seleccionado">Tipo Tarifa:</p>
+                    <p id="id_precio_normal_asiento_seleccionado">Precio Normal:</p>
+                </span>
+            </fieldset>
+
+            <fieldset id="id_seccion_entrada_pasajero" class = "fieldset" name="datos pasajero">
+                <legend class = "legend" >Ingreso Datos del Pasajero</legend>
+
+                <span class="form_grupo">
+                    <label class ="label" for ="id_dni">DNI: </label>						
+                    <input id ="id_dni" type="text" name="dni" placeholder="dni pasajero" value="">
+                    <span id="error_dni" class="error"></span>
+                </span>
+
+                <span class="form_grupo">
+                    <label class ="label" for ="id_nombre">nombre:</label>						
+                    <input  onblur="" id ="id_nombre" type="text" name="nombre" maxlength="20" placeholder="nombre pasajero" value ="">
+                    <span id="error_nombre" class="error"></span>
+                </span>
+                <span class="form_grupo">
+                    <label class ="label" for ="id_apellido">apellido:</label>						
+                    <input onblur="" id ="id_apellido" type="text" name="apellido" maxlength="20" placeholder="apellido pasajero" value="">
+                    <span id="error_apellido" class="error"></span>
+                </span>
+            </fieldset>
             
             <fieldset id="id_seccion_acciones"class = "fieldset field_acciones" name="acciones_botones">
-                <button id="id_siguiente_mapa_colectivo" class="boton" type ="button" onclick = "">siguiente</button>
+                <legend class = "legend" >acciones</legend>
+                <button id="id_envio" class="boton" type ="submit">Comparar</button>
+                <button id="id_borrar" class="boton" type ="button" onclick = "ir_comprar();">borrar</button>
+                <button id="id_cancelar" class="boton" type ="button" onclick = "ir_paginaRutas();">cancelar</button
             </fieldset>
         </form>
     </div>
