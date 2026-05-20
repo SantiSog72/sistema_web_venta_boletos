@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             ];
 
             // si es usuario frecuente
-            if (isset($usuario_bdd['puntos'])){
+            if ($conexion -> es_usuario_frecuente ($_POST['dni'])){
                 $json_usuario["es_usuario_frecuente"] = true;
                 $json_usuario["puntos"] = $usuario_bdd['puntos'];
             }

@@ -1,8 +1,9 @@
 <?php
+session_start();
 // Esto busca el archivo desde la raíz de tu htdocs/www
 require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
 
-// Ahora puedes usar las constantes en cualquier parte de la página:
+$usuario = $_SESSION["usuario"];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -32,7 +33,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
         const fecha_seleccionada = document.getElementById("id_fecha_seleccionada");
         const mapa_colectivo = document.getElementById("id_mapa_colectivo");
         const precio_normal_selec = document.getElementById("id_precio_normal_asiento_seleccionado");
+        const precio_final_efectivo_selec = document.getElementById("id_precio_final_efectivo_asiento_seleccionado");
         const tipo_tarifa_selec = document.getElementById("id_tipo_tarifa_asiento_seleccionado");
+        // recuperar si es usuario frecuente como booleano
+        const es_usuario_frecuente = JSON.parse (localStorage.getItem("es_usuario_frecuente"));
 
 
         //la lsita de rutas se recupera en forma de string
@@ -104,18 +108,15 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
             }
 		});
 
-		// formulario.addEventListener('reset', async function(){
-		// 	localStorage.removeItem("catalogo_actual");
-		// 	cargarCatalogo();
-		// });
         let div_anterior = "";
         let str_clases = "";
         mapa_colectivo.addEventListener("click", async function(evento){
             // si se clickea a un elemento que contiene en su lista de clases al aasiento
             if (evento.target.classList.contains("asiento")){
                 const hidden_nro_asiento = document.getElementById("id_nro_asiento");
+                const hidden_precio_final_efectivo = document.getElementById("id_precio_final_efectivo");
+                const hidden_tipo_tarifa = document.getElementById("id_tipo_tarifa");
                 const asiento_seleccionado =  parseInt(evento.target.textContent);
-                console.log(asiento_seleccionado);
                 hidden_nro_asiento.value = asiento_seleccionado;
                 
                 let lista_asientos = Array.from(document.getElementsByClassName("asiento"));
@@ -150,12 +151,63 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
                     });
                 let resultado = await respuesta.json();
 
+                // convierte en sqring para guardarlo en el local storage
+                localStorage.setItem("precios", JSON.stringify(resultado));
 
-                tipo_tarifa_selec.textContent = "Tipo Tarifa: " + resultado.tipoTarifa;
-                precio_normal_selec.textContent = "Precio Normal: " + resultado.precioNormal;
+
+                // muestra los precios
+                tipo_tarifa_selec.textContent = resultado.tipoTarifa;
+                precio_normal_selec.textContent = resultado.precioNormal;
+                precio_final_efectivo_selec.textContent = resultado.precio_final_efectivo;
+
+                if (es_usuario_frecuente){
+                    const precio_final_puntos_selec = document.getElementById("id_precio_final_puntos_asiento_seleccionado");
+                    const hidden_precio_final_puntos = document.getElementById("id_precio_final_puntos");
+                    const hidden_suma_puntos = document.getElementById("id_suma_puntos");
+
+                    precio_final_puntos_selec.textContent = resultado.precio_final_puntos;
+                    hidden_precio_final_puntos.value = resultado.precio_final_puntos;
+                    hidden_suma_puntos.value = resultado.suma_puntos;
+                }
+
+                
+
+                // envia los precios en un input hide
+                hidden_tipo_tarifa.value = resultado.tipoTarifa;
+                hidden_precio_final_efectivo.value = resultado.precio_final_efectivo;
+
             }
 
         });
+
+
+        formulario.addEventListener('submit', async function(evento) {
+			evento.preventDefault(); 
+            if (validar_datos()){
+                const datos = new FormData(formulario);
+
+                try {
+                    // El "await" espera la respuesta del servidor (es lo que permie el asincronico)
+                    const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/ProcesaCompraBoleto.php', {
+                        method: 'POST',
+                        body: datos
+                    });
+    
+                    const resultado = await respuesta.json();
+    
+                    if (resultado.exito) {
+                        alert(resultado.mensaje);
+                        ir_paginaRutas();
+                    } else {
+                        alert("Error: " + resultado.mensaje);
+                    }
+                } catch (error) {
+                    // atrapar los errores duplocados
+                    console.error("Error en la conexión:", error);
+                }
+            }
+
+		});
 
 
 
@@ -355,9 +407,21 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
                 </div>
 
                 <span class="form_grupo" id="id_contenedor_datos_asiento_seleccionado">
+                    <input id="id_tipo_tarifa" type="hidden" name="tipo_tarifa" value="">
+                    <input id="id_precio_final_efectivo" type="hidden" name="precio_final_efectivo" value="">
                     <span id="error_seleccion_asiento" class="error"></span>
-                    <p id="id_tipo_tarifa_asiento_seleccionado">Tipo Tarifa:</p>
-                    <p id="id_precio_normal_asiento_seleccionado">Precio Normal:</p>
+                    <p>Tipo Tarifa:<span id="id_tipo_tarifa_asiento_seleccionado"></span></p>
+                    <p>Precio Normal:<span id="id_precio_normal_asiento_seleccionado"></span></p>
+                    <p>Precio Final Efectivo:<span id="id_precio_final_efectivo_asiento_seleccionado"></span></p>
+                    <?php
+                        if ($usuario["es_usuario_frecuente"]){
+                    ?>
+                    <p>Precio Final Puntos:<span id="id_precio_final_puntos_asiento_seleccionado"></span></p>
+                    <input id="id_precio_final_puntos" type="hidden" name="precio_final_puntos" value="">
+                    <input id="id_suma_puntos" type="hidden" name="suma_puntos" value="0">
+                    <?php
+                        }
+                    ?>
                 </span>
             </fieldset>
 
@@ -381,7 +445,29 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
                     <span id="error_apellido" class="error"></span>
                 </span>
             </fieldset>
+            <?php
             
+            if ($usuario["es_usuario_frecuente"]){
+            ?>
+            <fieldset id="id_seccion_forma_pago" class = "fieldset">
+                <legend class = "legend" >seleccione la forma de pago</legend>
+                <span class="form_grupo">
+                    <p>puntos disponibles:<?php print ($usuario["puntos"]); ?></p>
+                </span>
+                <span class="form_grupo">
+                    <input type="radio" name="tipo_pago" value="efectivo" checked>
+                    <label class="label">efectivo</label><br>
+                    <input type="radio" name="tipo_pago" value="puntos">
+                    <label class="label">puntos</label><br>
+                </span>
+            </fieldset>
+            <?php
+            }else{
+            ?>
+            <input type= "hidden" name="tipo_pago" value="efectivo">
+            <?php
+            }
+            ?>
             <fieldset id="id_seccion_acciones"class = "fieldset field_acciones" name="acciones_botones">
                 <legend class = "legend" >acciones</legend>
                 <button id="id_envio" class="boton" type ="submit">Comparar</button>

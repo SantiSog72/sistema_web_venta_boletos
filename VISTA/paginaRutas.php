@@ -1,7 +1,8 @@
 <?php
+session_start();
 // Esto busca el archivo desde la raíz de tu htdocs/www
 require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
-
+$usuario = $_SESSION["usuario"];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -20,7 +21,15 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 
 <script>
 	document.addEventListener('DOMContentLoaded', function () {//DOMContentLoaded: evento que se produce al cargar la pagina
-	
+	boton_sing_out = document.getElementById("id_boton_sing_out");
+	const radios = document.querySelectorAll('input[name="tipo_usuario"]');
+
+	// const radio_usuario_frecuente = document.getElementById("id_radio_usuario_frecuente");
+	// const radio_usuario_comun = document.getElementById("id_radio_usuario_comun");
+	// if (JSON.parse (localStorage.getItem("es_usuario_frecuente"))){
+	// 	radio_usuario_frecuente.checked;
+	// }
+
 	async function cargarRutas() {
 		try {
 			const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/Procesa_cargarRutas.php');
@@ -38,6 +47,41 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 		}
 	cargarRutas(); 
 
+
+	boton_sing_out.addEventListener("click", function(){
+		//desloguearse
+		ir_singIn();
+	});
+
+	radios.forEach(radio => {
+		radio.addEventListener('change', async function() {
+			let datos = new FormData();
+			datos.append("tipo_usuario", this.value);
+			
+
+			const respuesta = await fetch(
+				'<?= WEB_ROOT ?>CONTROLADOR/ProcesaCambioTipoUsuario.php',{
+					method:'POST',
+					body: datos
+				});
+			let resultado = await respuesta.json();
+
+			if (resultado.exito) {
+				alert(resultado.mensaje);
+			} else {
+				alert("Error: " + resultado.mensaje);
+			}
+		});
+	});
+
+
+
+
+	
+
+
+
+
 	});
 
 </script>
@@ -53,9 +97,20 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 	<header>
 	<h1>Venta de Boletos para Terminal de Colectivos</h1>
 	<nav class="contenedor_mapa">
-		<button class= "boton" onclick="ir_singIn();">Iniciar sesion</button>
-		<button class= "boton" onclick="ir_singUp();">registrarse</button>
+		<button id="id_boton_sing_out" class= "boton">Log out</button>
 		<button class= "boton" onclick="ir_comprar()">Comprar Boleto</button>
+
+		<p>Tipo de Usuario</p>
+		<span class="">
+			<input id ="id_radio_usuario_comun" type="radio" name="tipo_usuario" value="usuario_comun" checked>
+			<label class="label">usuario común</label><br>
+			<?php if ($usuario["es_usuario_frecuente"]){?>
+			<input id ="id_radio_usuario_frecuente" type="radio" name="tipo_usuario" value="usuario_frecuente" checked>
+			<?php }else{?>
+			<input id ="id_radio_usuario_frecuente" type="radio" name="tipo_usuario" value="usuario_frecuente">
+			<?php }?>
+			<label class="label">usuario frecuente</label><br>
+		</span>
 	</nav>
 	</header>
 

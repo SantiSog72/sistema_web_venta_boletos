@@ -77,20 +77,3 @@ function validar_datos (){
 		&& validar_datos_pasajero()
 	);
 }
-
-
-
-
-
-
-
-// function enviar_formulario (){
-// 	Validacion.limpiar_erorres();
-// 	formulario = document.getElementById("id_fomr_compra_boleto");
-// 	// console.log(formulario);
-	
-// 	if (validar_datos()){
-// 		console.log("el Usuario se valido exitosamente");
-// 		formulario.submit();
-// 	}
-// }

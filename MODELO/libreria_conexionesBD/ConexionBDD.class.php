@@ -132,6 +132,59 @@ class ConexionBDD {
         return $usuario;
     }
 
+    public function obtener_puntos_usuario ($dni_usuario){
+        $consulta = $this -> conexion -> prepare("
+            SELECT puntos
+            FROM usuario_frecuente
+            WHERE dni = ?
+        ");
+        $consulta -> bind_param("s", $dni_usuario);
+        $consulta -> execute();
+        $resultado = $consulta -> get_result();
+        $fila = $resultado -> fetch_assoc();
+        $resultado->free();
+        return (int)$fila["puntos"];
+    }
+
+    public function existe_pasajero_en_viaje ($dni_pasajero, $cod_ruta, $fecha_viaje){
+        $consulta = $this -> conexion -> prepare("
+            SELECT EXISTS (
+                SELECT 1
+                FROM boleto b INNER JOIN pasajero p ON b.dni_pasajero = p.dni
+                WHERE p.dni = ? AND b.cod_ruta = ? AND b.fecha_viaje = ?
+            ) as existe_pasajero_en_viaje
+        ");
+        $consulta -> bind_param("sss", 
+            $dni_pasajero,
+            $cod_ruta, 
+            $fecha_viaje
+        );
+        
+        $consulta -> execute();
+        $resultado = $consulta -> get_result();
+        $fila = $resultado -> fetch_assoc();
+        //devuelve 0 o 1 y lo convierto a booleano
+        return (bool)$fila["existe_pasajero_en_viaje"];
+    }
+
+
+    public function es_usuario_frecuente($dni_usuario){
+        $consulta = $this -> conexion -> prepare("
+            SELECT EXISTS (
+                SELECT 1 
+                FROM usuario_frecuente
+                WHERE dni = ?
+            ) as es_frecuente
+        ");
+        
+        $consulta -> bind_param("s", $dni_usuario);
+        $consulta -> execute();
+        $resultado = $consulta -> get_result();
+        $fila = $resultado -> fetch_assoc();
+        //devuelve 0 o 1 y lo convierto a booleano
+        return (bool)$fila["es_frecuente"];
+    }
+
     public function __destruct() {
         if ($this->conexion != null) {
             $this->conexion->close();

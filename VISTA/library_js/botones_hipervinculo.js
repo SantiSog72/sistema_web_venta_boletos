@@ -10,6 +10,10 @@ function ir_singUp(){
     window.location.href = `${raiz}VISTA/singUp.php`;   
 }
 
+function ir_singIn(){
+    window.location.href = `${raiz}index.php`;   
+}
+
 function ir_comprar(){
     window.location.href = `${raiz}VISTA/comprarPasaje.php`;   
 }

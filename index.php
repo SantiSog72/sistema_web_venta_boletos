@@ -22,7 +22,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 			evento.preventDefault(); 
 
 			const datos = new FormData(formulario_ingreso);
-			console.log (datos);
 
 			try {
 				const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/ProcesaingresoUsuario.php', {
@@ -32,8 +31,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 
 				const resultado = await respuesta.json();
 
+				//guardo si es usuario frecuente, guardo con stringfy recupero con parse
+				localStorage.setItem("es_usuario_frecuente", JSON.stringify(resultado.usuario.es_usuario_frecuente));
+
 				if (resultado.exito) {
-					console.log(resultado);
 					ir_paginaRutas();
 				} else {
 					alert("Error: " + resultado.mensaje);
