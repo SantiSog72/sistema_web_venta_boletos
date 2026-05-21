@@ -4,6 +4,7 @@ session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
 
 $usuario = $_SESSION["usuario"];
+// print_r($usuario);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -44,6 +45,7 @@ $usuario = $_SESSION["usuario"];
         const listaRutas = JSON.parse(listaRutas_str);
         
         function vista_asientos_ocupados(lista_asientos_ocupados){
+            // resetear_mapa();
             let lista_asientos = Array.from(document.getElementsByClassName("asiento"));
 
             lista_asientos.forEach(asiento_viaje => {
@@ -84,11 +86,12 @@ $usuario = $_SESSION["usuario"];
                     '<?= WEB_ROOT ?>CONTROLADOR/ProcesaTraerViaje.php',{
                         method:'POST',
                         body: datos
-                    });
+                });
                 let lista_asientos_ocupados = await respuesta.json();
-                // console.log (lista_asientos_ocupados);
+                console.log (lista_asientos_ocupados);
 
-                
+                resetear_mapa();
+
                 vista_asientos_ocupados(lista_asientos_ocupados);
             }
         }
@@ -97,9 +100,9 @@ $usuario = $_SESSION["usuario"];
         renderizar_info_ruta_seleccionada (select_rutas.value, listaRutas);
         actualizar_viaje();
 
-        select_rutas.addEventListener("change", function (){
-            renderizar_info_ruta_seleccionada (this.value, listaRutas)
-        });
+        // select_rutas.addEventListener("change", function (){
+        //     renderizar_info_ruta_seleccionada (this.value, listaRutas);
+        // });
 
 		formulario.addEventListener('submit', async function(evento) {
 			evento.preventDefault(); //evita que se recargue la pagina (que se envie el formulario)
@@ -216,11 +219,16 @@ $usuario = $_SESSION["usuario"];
         // para que se actualice el viaje al cambiar la ruta o la fecha
         fecha_seleccionada.addEventListener("change", async function(){
             actualizar_viaje();
+            // div_anterior = "";
+            // str_clases = "";
         });
 
-
+        // la info de la ruta solo cambia al cambiar la ruta (no la fecha)
         select_rutas.addEventListener("change", async function(){
+            renderizar_info_ruta_seleccionada (this.value, listaRutas);
             actualizar_viaje();
+            // div_anterior = "";
+            // str_clases = "";
         });
 	});
 

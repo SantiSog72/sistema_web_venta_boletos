@@ -17,13 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     switch($_POST["tipo_usuario"]){
         case "usuario_frecuente":
             $_SESSION["usuario"]["es_usuario_frecuente"] = true;
+            $_SESSION["usuario"]["puntos"] = 0;
             $consulta = $conexion->prepare("
                 INSERT IGNORE INTO usuario_frecuente (dni)
                 VALUES (?);
             ");
             $json_respuesta=[
                 "exito" => true,
-                "mensaje" => "Ahora sos un usuario frecuente"
+                "mensaje" => "Ahora sos un usuario frecuente",
+                "es_usuario_frecuente" => true
             ];
             break;
         case "usuario_comun":
@@ -34,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             ");
             $json_respuesta=[
                 "exito" => true,
-                "mensaje" => "Ahora sos un usuario normal, se eliminaron los puntos"
+                "mensaje" => "Ahora sos un usuario normal, se eliminaron los puntos",
+                "es_usuario_frecuente" => false
             ];
             break;
     }

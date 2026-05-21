@@ -58,6 +58,158 @@ function renderizar_info_ruta_seleccionada (cod_ruta_seleccionado, listaRutas){
     contenedor_datos_ruta.innerHTML = html_info_ruta;
 }
 
+
+function resetear_mapa (){
+
+    const mapa_colectivo = document.getElementById("id_mapa_colectivo");
+
+    // limpiar_contenedor("id_mapa_colectivo");
+    html_mapa_colectivo = `
+    <div id="id_contenedor_asientos_planta_baja">
+        <div class="tarjeta ES">ES</div>
+        <div class="tarjeta ES">ES</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+
+        <div class="tarjeta TV">TV</div>
+        <div class="tarjeta WC">WC</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta PU">PU</div>
+
+        <div class="tarjeta tarifa_ejecutiva asiento">49</div>
+        <div class="tarjeta tarifa_ejecutiva asiento">50</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_ejecutiva asiento">51</div>
+
+        <div class="tarjeta tarifa_ejecutiva asiento">52</div>
+        <div class="tarjeta tarifa_ejecutiva asiento">53</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_ejecutiva asiento">54</div>
+
+        <div class="tarjeta tarifa_ejecutiva asiento">55</div>
+        <div class="tarjeta tarifa_ejecutiva asiento">56</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_ejecutiva asiento">57</div>
+
+        <div class="tarjeta tarifa_ejecutiva asiento">58</div>
+        <div class="tarjeta tarifa_ejecutiva asiento">59</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_ejecutiva asiento">60</div>
+
+    </div>
+
+    <div id="id_contenedor_asientos_planta_alta">
+
+        <!-- FILA 1 — normal -->
+        <div class="tarjeta tarifa_normal asiento">1</div>
+        <div class="tarjeta tarifa_normal asiento">2</div>
+        <div class="tarjeta TV">TV</div>
+        <div class="tarjeta tarifa_normal asiento">3</div>
+        <div class="tarjeta tarifa_normal asiento">4</div>
+
+        <!-- FILA 2 — normal -->
+        <div class="tarjeta tarifa_normal asiento">5</div>
+        <div class="tarjeta tarifa_normal asiento">6</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta ES">ES</div>
+
+        <!-- FILA 3 — normal -->
+        <div class="tarjeta tarifa_normal asiento">7</div>
+        <div class="tarjeta tarifa_normal asiento">8</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta ES">ES</div>
+
+        <!-- FILA 4 — normal -->
+        <div class="tarjeta tarifa_normal asiento">9</div>
+        <div class="tarjeta tarifa_normal asiento">10</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_normal asiento">11</div>
+        <div class="tarjeta tarifa_normal asiento">12</div>
+
+        <!-- FILA 5 — normal -->
+        <div class="tarjeta tarifa_normal asiento">13</div>
+        <div class="tarjeta tarifa_normal asiento">14</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_normal asiento">15</div>
+        <div class="tarjeta tarifa_normal asiento">16</div>
+
+        <!-- FILA 6 — normal -->
+        <div class="tarjeta tarifa_normal asiento">17</div>
+        <div class="tarjeta tarifa_normal asiento">18</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_normal asiento">19</div>
+        <div class="tarjeta tarifa_normal asiento">20</div>
+
+        <!-- FILA 7 — promocional -->
+        <div class="tarjeta tarifa_promocional asiento">21</div>
+        <div class="tarjeta tarifa_promocional asiento">22</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_promocional asiento">23</div>
+        <div class="tarjeta tarifa_promocional asiento">24</div>
+
+        <!-- FILA 8 — promocional -->
+        <div class="tarjeta tarifa_promocional asiento">25</div>
+        <div class="tarjeta tarifa_promocional asiento">26</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_promocional asiento">27</div>
+        <div class="tarjeta tarifa_promocional asiento">28</div>
+
+        <!-- FILA 9 — promocional -->
+        <div class="tarjeta tarifa_promocional asiento">29</div>
+        <div class="tarjeta tarifa_promocional asiento">30</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_promocional asiento">31</div>
+        <div class="tarjeta tarifa_promocional asiento">32</div>
+
+        <!-- FILA 10 — promocional -->
+        <div class="tarjeta tarifa_promocional asiento">33</div>
+        <div class="tarjeta tarifa_promocional asiento">34</div>
+        <div class="tarjeta TV">TV</div>
+        <div class="tarjeta tarifa_promocional asiento">35</div>
+        <div class="tarjeta tarifa_promocional asiento">36</div>
+
+        <!-- FILA 11 — promocional -->
+        <div class="tarjeta tarifa_promocional asiento">37</div>
+        <div class="tarjeta tarifa_promocional asiento">38</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_promocional asiento">39</div>
+        <div class="tarjeta tarifa_promocional asiento">40</div>
+
+        <!-- FILA 12 — promocional -->
+        <div class="tarjeta tarifa_promocional asiento">41</div>
+        <div class="tarjeta tarifa_promocional asiento">42</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_promocional asiento">43</div>
+        <div class="tarjeta tarifa_promocional asiento">44</div>
+
+        <!-- FILA 13 — promocional -->
+        <div class="tarjeta tarifa_promocional asiento">45</div>
+        <div class="tarjeta tarifa_promocional asiento">46</div>
+        <div class="tarjeta vacio"></div>
+        <div class="tarjeta tarifa_promocional asiento">47</div>
+        <div class="tarjeta tarifa_promocional asiento">48</div>
+
+    </div>
+                        
+    `;
+    mapa_colectivo.innerHTML = html_mapa_colectivo;
+    // agregar_elemento_inicio(html_mapa_colectivo, "id_mapa_colectivo");
+}
+
 // function renderizar_seccion_mapas(lista_asientos_ocupados){
 //     limpiar_contenedor("id_fomr_compra_boleto", "id_seccion_asiento_tarifa");
 

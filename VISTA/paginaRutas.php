@@ -50,6 +50,7 @@ $usuario = $_SESSION["usuario"];
 
 	boton_sing_out.addEventListener("click", function(){
 		//desloguearse
+		localStorage.clear();
 		ir_singIn();
 	});
 
@@ -67,6 +68,7 @@ $usuario = $_SESSION["usuario"];
 			let resultado = await respuesta.json();
 
 			if (resultado.exito) {
+				localStorage.setItem("es_usuario_frecuente", JSON.stringify(resultado.es_usuario_frecuente));
 				alert(resultado.mensaje);
 			} else {
 				alert("Error: " + resultado.mensaje);
