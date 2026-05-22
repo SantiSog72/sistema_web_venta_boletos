@@ -98,22 +98,32 @@ $usuario = $_SESSION["usuario"];
 <body> 
 	<header>
 	<h1>Venta de Boletos para Terminal de Colectivos</h1>
+	<?php
+        print ("<p>dni usuario: ".$usuario["dni"]."</p>");
+        print ("<p>nombre: ".$usuario["primer_nombre"]."</p>");
+        print ("<p>apellido: ".$usuario["apellido"]."</p>");
+        if ($usuario["es_usuario_frecuente"]){
+            print ("<p>puntos acumulados: ".$usuario["puntos"]."</p>");
+        }
+    ?>
 	<nav class="contenedor_mapa">
 		<button id="id_boton_sing_out" class= "boton">Log out</button>
 		<button class= "boton" onclick="ir_comprar()">Comprar Boleto</button>
-
-		<p>Tipo de Usuario</p>
-		<span class="">
-			<input id ="id_radio_usuario_comun" type="radio" name="tipo_usuario" value="usuario_comun" checked>
-			<label class="label">usuario común</label><br>
-			<?php if ($usuario["es_usuario_frecuente"]){?>
-			<input id ="id_radio_usuario_frecuente" type="radio" name="tipo_usuario" value="usuario_frecuente" checked>
-			<?php }else{?>
-			<input id ="id_radio_usuario_frecuente" type="radio" name="tipo_usuario" value="usuario_frecuente">
-			<?php }?>
-			<label class="label">usuario frecuente</label><br>
-		</span>
+		<button class= "boton" onclick="ir_historial_compras()">Ver historial de compras</button>
 	</nav>
+	
+	<p>Tipo de Usuario</p>
+	<span class="">
+		<input id ="id_radio_usuario_comun" type="radio" name="tipo_usuario" value="usuario_comun" checked>
+		<label class="label">usuario común</label><br>
+		<?php if ($usuario["es_usuario_frecuente"]){?>
+		<input id ="id_radio_usuario_frecuente" type="radio" name="tipo_usuario" value="usuario_frecuente" checked>
+		<?php }else{?>
+		<input id ="id_radio_usuario_frecuente" type="radio" name="tipo_usuario" value="usuario_frecuente">
+		<?php }?>
+		<label class="label">usuario frecuente</label><br>
+	</span>
+
 	</header>
 
 	<div id="id_contenedor_rutas">

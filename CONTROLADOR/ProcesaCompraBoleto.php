@@ -136,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $consulta_ingresa_boleto->execute();
         if ($es_usuario_frecuente){
             $consulta_puntos->execute();
+            $_SESSION["usuario"]["puntos"] = $instancia ->obtener_puntos_usuario($dni_usuario);
         }
 
         $json_respuesta = [

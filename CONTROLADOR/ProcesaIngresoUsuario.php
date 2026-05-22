@@ -5,16 +5,24 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 require_once BASE_PATH.'MODELO/libreria_conexionesBD/ConexionBDD.class.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $conexion = ConexionBDD::getInstancia();
-    $usuario_bdd = $conexion->obtener_usuario($_POST['dni']);
-    
+    $instancia = ConexionBDD::getInstancia();
+    $usuario_bdd = $instancia->obtener_usuario($_POST['dni']);
+
     $json_respuesta = [
         "exito" => false,
-        "mensaje" => "El usuario o la contraseña es incorrecta"
+        "mensaje" => "El usuario o la contraseña es incorrecta",
     ];
 
     if ($usuario_bdd){
         if ($usuario_bdd['contrasena'] === $_POST['contrasena']){
+
+
+
+            // obtengo viajes y filtro los que estan vigentes
+            $fechaActual = date('Y-m-d');
+            $lista_viajes = $instancia -> obtener_viajes ($_POST["dni"]);
+            $lista_viajes_pendientes = $lista_viajes.filter(elemento =>elemento.fecha_viaje >= $fechaActual);
+
             
 
             $json_usuario = [
@@ -26,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             ];
 
             // si es usuario frecuente
-            if ($conexion -> es_usuario_frecuente ($_POST['dni'])){
+            if ($instancia -> es_usuario_frecuente ($_POST['dni'])){
                 $json_usuario["es_usuario_frecuente"] = true;
                 $json_usuario["puntos"] = $usuario_bdd['puntos'];
             }
@@ -34,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $json_respuesta = [
                 "exito" => true,
                 "usuario" => $json_usuario,
-                "mensaje" => "Ingreso exitoso"//para el console.log
+                "mensaje" => "Ingreso exitoso",
+                "viajes_pendientes" => $lista_viajes_pendientes
             ];
 
             $_SESSION["usuario"] = $json_usuario;

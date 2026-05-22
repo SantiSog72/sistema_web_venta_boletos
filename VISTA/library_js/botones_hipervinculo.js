@@ -17,3 +17,7 @@ function ir_singIn(){
 function ir_comprar(){
     window.location.href = `${raiz}VISTA/comprarPasaje.php`;   
 }
+
+function ir_historial_compras(){
+    window.location.href = `${raiz}VISTA/historialCompras.php`;   
+}

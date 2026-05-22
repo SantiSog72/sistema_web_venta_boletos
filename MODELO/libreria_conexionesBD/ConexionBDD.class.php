@@ -31,6 +31,34 @@ class ConexionBDD {
         return $this -> conexion;
     }
 
+    
+    // CURDATE() obtiene fecha_actual en formato YYYY-MM-DD en string
+    public function obtener_viajes($dni_usuario) {
+        $consulta = $this -> conexion->prepare("
+            SELECT b.fecha_viaje, b.cod_ruta, b.tipo_tarifa, b.pago_efectivo, r.lugar_origen, r.lugar_destino,
+        r.hora_salida, b.nro_asiento, b.precio_final, b.fecha_emision, b.fecha_emision, p.dni, p.nombre, p.apellido
+            FROM boleto b
+            JOIN usuario u ON b.dni_usuario = u.dni
+            JOIN ruta r ON b.cod_ruta = r.cod_ruta
+            JOIN pasajero p ON b.dni_pasajero = p.dni
+            WHERE u.dni = ?
+            ORDER BY b.fecha_viaje, b.cod_ruta ASC
+        ");
+
+        $consulta -> bind_param("s", 
+            $dni_usuario,
+        );
+
+        $consulta->execute();
+        $resultado = $consulta->get_result();
+        $lista_viajes = [];
+        while ($fila = $resultado->fetch_assoc()) {
+            $lista_viajes[] = $fila;
+        }
+        
+        $resultado->free();
+        return $lista_viajes;
+    }
  
 
     // 

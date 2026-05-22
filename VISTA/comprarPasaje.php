@@ -4,7 +4,7 @@ session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
 
 $usuario = $_SESSION["usuario"];
-// print_r($usuario);
+print_r($usuario);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -100,17 +100,6 @@ $usuario = $_SESSION["usuario"];
         renderizar_info_ruta_seleccionada (select_rutas.value, listaRutas);
         actualizar_viaje();
 
-        // select_rutas.addEventListener("change", function (){
-        //     renderizar_info_ruta_seleccionada (this.value, listaRutas);
-        // });
-
-		formulario.addEventListener('submit', async function(evento) {
-			evento.preventDefault(); //evita que se recargue la pagina (que se envie el formulario)
-            if (validar_datos()){
-                console.log ("el formulario se envio con exito");
-            }
-		});
-
         let div_anterior = "";
         let str_clases = "";
         mapa_colectivo.addEventListener("click", async function(evento){
@@ -189,6 +178,11 @@ $usuario = $_SESSION["usuario"];
             if (validar_datos()){
                 const datos = new FormData(formulario);
 
+                const datosFormateados = Object.fromEntries(datos.entries());
+
+                // 3. Los mostramos en la consola
+                console.log("Datos del formulario:", datosFormateados);
+
                 try {
                     // El "await" espera la respuesta del servidor (es lo que permie el asincronico)
                     const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/ProcesaCompraBoleto.php', {
@@ -241,6 +235,20 @@ $usuario = $_SESSION["usuario"];
 <body> 
 	<header>
 	<h1>Formulario para compra de Boleto</h1>
+    <?php
+        print ("<p>dni usuario: ".$usuario["dni"]."</p>");
+        print ("<p>nombre: ".$usuario["primer_nombre"]."</p>");
+        print ("<p>apellido: ".$usuario["apellido"]."</p>");
+        if ($usuario["es_usuario_frecuente"]){
+            print ("<p>puntos acumulados: ".$usuario["puntos"]."</p>");
+        }
+    ?>
+
+    <nav class="contenedor_mapa">
+		<button id="id_boton_sing_out" class= "boton">Log out</button>
+		<button class= "boton" onclick="ir_historial_compras()">Ver historial de compras</button>
+		<button class= "boton" onclick="ir_paginaRutas()">ver Rutas disponibles</button>
+	</nav>
 	</header>
     
     <div class= "contenedor_formulario">

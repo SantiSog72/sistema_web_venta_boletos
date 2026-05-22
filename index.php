@@ -12,6 +12,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
     window.BASE_URL = "<?= WEB_ROOT ?>";
 </script>
 <script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/botones_hipervinculo.js"></script>
+<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/ventana_emergente.js"></script>
 <!-- <script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/libreria_js/ubicador_elementos.js"></script> -->
 
 <script>
@@ -35,6 +36,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 				localStorage.setItem("es_usuario_frecuente", JSON.stringify(resultado.usuario.es_usuario_frecuente));
 
 				if (resultado.exito) {
+					console.log (resultado);
+					ventana_bienvenida_viajes(resultado);
 					ir_paginaRutas();
 				} else {
 					alert("Error: " + resultado.mensaje);
