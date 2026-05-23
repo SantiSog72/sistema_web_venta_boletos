@@ -56,35 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     }
 
-    
-
-    // $consulta = $conexion->prepare("
-    //     INSERT INTO boleto (fecha_emision, fecha_viaje, cod_ruta, nro_asiento, tipo_tarifa , precio_final, dni_usuario, dni_pasajero, pago_efectivo)
-    //     VALUE (?,?,?,?,?,?,?,?,?,?);
-
-    //     INSERT INTO boleto (dni, nombre, apellido)
-    //     VALUE (?,?,?);
-
-
-        
-    // ");
-
-    // $consulta -> bind_param("sssisissi sss", 
-    //     $fechaActual_str,
-    //     $_POST['fecha_viaje'],
-    //     $_POST['cod_ruta'],
-    //     $_POST['nro_asiento'],
-    //     $_POST['tipo_tarifa'],
-    //     $precio_final,
-    //     $dni_usuario,
-    //     $_POST['dni'],
-    //     $pago_efectivo,
-
-    //     $_POST['dni'],
-    //     $_POST['nombre'],
-    //     $_POST['apellido']
-    // );
-    // $consulta->execute();
 
     // insertar boleto
     $consulta_ingresa_boleto = $conexion->prepare("

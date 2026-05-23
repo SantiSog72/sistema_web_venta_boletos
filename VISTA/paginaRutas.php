@@ -9,7 +9,7 @@ $usuario = $_SESSION["usuario"];
 <head>
 <meta charset="UTF-8">
 <meta name="autor" content="Santiago Servin">
-<meta name="description" content="Pagina principal">
+<meta name="description" content="Pagina rutas">
 <script>
     window.BASE_URL = "<?= WEB_ROOT ?>";
 </script>
@@ -48,11 +48,11 @@ $usuario = $_SESSION["usuario"];
 	cargarRutas(); 
 
 
-	boton_sing_out.addEventListener("click", function(){
-		//desloguearse
-		localStorage.clear();
-		ir_singIn();
-	});
+	// boton_sing_out.addEventListener("click", function(){
+	// 	//desloguearse
+	// 	localStorage.clear();
+	// 	ir_singIn();
+	// });
 
 	radios.forEach(radio => {
 		radio.addEventListener('change', async function() {
@@ -107,11 +107,11 @@ $usuario = $_SESSION["usuario"];
         }
     ?>
 	<nav class="contenedor_mapa">
-		<button id="id_boton_sing_out" class= "boton">Log out</button>
+		<button id="id_boton_sing_out" class= "boton" onclick="ir_singOut();">Log out</button>
 		<button class= "boton" onclick="ir_comprar()">Comprar Boleto</button>
 		<button class= "boton" onclick="ir_historial_compras()">Ver historial de compras</button>
 	</nav>
-	
+
 	<p>Tipo de Usuario</p>
 	<span class="">
 		<input id ="id_radio_usuario_comun" type="radio" name="tipo_usuario" value="usuario_comun" checked>

@@ -4,14 +4,14 @@ session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
 
 $usuario = $_SESSION["usuario"];
-print_r($usuario);
+// print_r($usuario);
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="autor" content="Santiago Servin">
-<meta name="description" content="Pagina principal">
+<meta name="description" content="Pagina compra pasaje">
 
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/index.css">
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/formulario_estilos.css">
@@ -69,6 +69,8 @@ print_r($usuario);
         
 
         }
+
+        
 
         async function actualizar_viaje(){
             if (validar_datos_viaje ()){
@@ -179,9 +181,8 @@ print_r($usuario);
                 const datos = new FormData(formulario);
 
                 const datosFormateados = Object.fromEntries(datos.entries());
-
-                // 3. Los mostramos en la consola
                 console.log("Datos del formulario:", datosFormateados);
+
 
                 try {
                     // El "await" espera la respuesta del servidor (es lo que permie el asincronico)
@@ -191,10 +192,15 @@ print_r($usuario);
                     });
     
                     const resultado = await respuesta.json();
+                    console.log(resultado);
     
                     if (resultado.exito) {
                         alert(resultado.mensaje);
-                        ir_paginaRutas();
+
+                        // imprimir pasaje
+                        asignar_valores_a_ocultos_imprimir(datosFormateados);
+                        // window.print();
+                        // ir_paginaRutas();
                     } else {
                         alert("Error: " + resultado.mensaje);
                     }
@@ -245,7 +251,7 @@ print_r($usuario);
     ?>
 
     <nav class="contenedor_mapa">
-		<button id="id_boton_sing_out" class= "boton">Log out</button>
+		<button id="id_boton_sing_out" class= "boton" onclick="ir_singOut();">Log out</button>
 		<button class= "boton" onclick="ir_historial_compras()">Ver historial de compras</button>
 		<button class= "boton" onclick="ir_paginaRutas()">ver Rutas disponibles</button>
 	</nav>
@@ -488,7 +494,7 @@ print_r($usuario);
                 <legend class = "legend" >acciones</legend>
                 <button id="id_envio" class="boton" type ="submit">Comparar</button>
                 <button id="id_borrar" class="boton" type ="button" onclick = "ir_comprar();">borrar</button>
-                <button id="id_cancelar" class="boton" type ="button" onclick = "ir_paginaRutas();">cancelar</button
+                <button id="id_cancelar" class="boton" type ="button" onclick = "asignar_valores_a_ocultos_imprimir();">cancelar</button
             </fieldset>
         </form>
     </div>
@@ -498,6 +504,20 @@ print_r($usuario);
 		<p>Final Libre 2026</p>		
 	</div>
 	</footer>
+
+    <div id="id_boleto_imprimible">
+        <h2>Boleto de Viaje</h2>
+        <p><strong>Nro boleto:</strong> <span id="id_print_nro_boleto"></span></p>
+        <p><strong>Pasajero:</strong> <span id="id_print_pasajero"></span></p>
+        <p><strong>DNI:</strong> <span id="id_print_dni"></span></p>
+        <p><strong>Origen:</strong> <span id="id_print_origen"></span></p>
+        <p><strong>Destino:</strong> <span id="id_print_destino"></span></p>
+        <p><strong>Fecha:</strong> <span id="id_print_fecha"></span></p>
+        <p><strong>Hora:</strong> <span id="id_print_hora"></span></p>
+        <p><strong>Asiento:</strong> <span id="id_print_asiento"></span></p>
+        <p><strong>Tarifa:</strong> <span id="id_print_tarifa"></span></p>
+        <p><strong>Precio:</strong> <span id="id_print_precio"></span></p>
+    </div>
 	
 </body>
 

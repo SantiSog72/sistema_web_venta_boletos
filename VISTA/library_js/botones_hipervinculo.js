@@ -21,3 +21,11 @@ function ir_comprar(){
 function ir_historial_compras(){
     window.location.href = `${raiz}VISTA/historialCompras.php`;   
 }
+
+function ir_singOut(){
+    //desloguearse
+    localStorage.clear();
+	ir_singIn(); 
+}
+
+		

@@ -124,3 +124,27 @@
     transform: scale(0.92);
     box-shadow: 0 0 0 2px #333;
 }
+
+/* de facto oculto */
+#id_boleto_imprimible {
+    display: none;
+}
+/* .contenedor_formulario, header, footer{
+    display: none;
+}
+
+#id_boleto_imprimible, #id_boleto_imprimible *{
+    display: block;
+} */
+
+
+/* al imprimir ocultar */
+@media print {
+    /* ocultar todo menos el boleto imprimible*/
+    .contenedor_formulario, header, footer{
+        display: none;
+    }
+    #id_boleto_imprimible, #id_boleto_imprimible * {
+        display: block;
+    }
+}

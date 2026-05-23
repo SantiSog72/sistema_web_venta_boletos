@@ -104,7 +104,7 @@ $usuario = $_SESSION["usuario"];
             }
         ?>
         <nav class="contenedor_mapa">
-            <button id="id_boton_sing_out" class= "boton">Log out</button>
+            <button id="id_boton_sing_out" class= "boton" onclick="ir_singOut();">Log out</button>
             <button class= "boton" onclick="ir_comprar()">Comprar Boleto</button>
             <button class= "boton" onclick="ir_paginaRutas()">ver Rutas disponibles</button>
         </nav>

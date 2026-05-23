@@ -116,5 +116,8 @@ function ventana_bienvenida_viajes (json_datos){
     }else{
         contenedor_info_viajes.innerHTML = "<p>¡Aún no tiene viajes pendientes!</p>";
     }
-    
+
 }
+
+
+

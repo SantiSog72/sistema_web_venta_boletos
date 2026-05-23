@@ -447,3 +447,57 @@ function resetear_mapa (){
 
 //     contenedor.innerHTML = html_botones;
 // }
+
+function asignar_valores_a_ocultos_imprimir (json_datos_formulario){
+
+    const nro_boleto = document.getElementById("id_print_nro_boleto");
+    const pasajero = document.getElementById("id_print_pasajero");
+    const dni_usuario = document.getElementById("id_print_dni");
+    const origen = document.getElementById("id_print_origen");
+    const destino = document.getElementById("id_print_destino");
+    const fecha = document.getElementById("id_print_fecha");
+    const hora = document.getElementById("id_print_hora");
+    const asiento = document.getElementById("id_print_asiento");
+    const tarifa = document.getElementById("id_print_tarifa");
+    const precio = document.getElementById("id_print_precio");
+
+
+
+    const es_usuario_frecuente = JSON.parse (localStorage.getItem("es_usuario_frecuente"));
+    // const precios = JSON.parse (localStorage.getItem("precios"));
+    const rutas = JSON.parse (localStorage.getItem("Rutas_disponibles"));
+
+    
+
+    let ruta_seleccionada = rutas.find(elemento => {
+        console.log (elemento.cod_ruta);
+        console.log (json_datos_formulario.cod_ruta);
+        return (elemento.cod_ruta === json_datos_formulario.cod_ruta);
+    });
+
+
+    let precio_final = ""
+    switch (json_datos_formulario.tipo_pago) {
+        case "efectivo":
+            precio_final = json_datos_formulario.precio_final_efectivo;
+            break;
+
+        default:
+            precio_final = json_datos_formulario.precio_final_puntos;
+            break;
+    }
+
+    pasajero.textContent = `DNI: ${json_datos_formulario.dni}, Nombre y Apellido: ${json_datos_formulario.nombre} ${json_datos_formulario.apellido}`;
+    dni_usuario.textContent = `BDD`;
+    nro_boleto.textContent = `BDD`;
+    origen.textContent = `${ruta_seleccionada.lugar_origen}`;
+    destino.textContent = `${ruta_seleccionada.lugar_destino}`;
+    hora.textContent = `${ruta_seleccionada.hora_salida}`;
+    fecha.textContent = `${json_datos_formulario.fecha_viaje}`;
+    asiento.textContent = `${json_datos_formulario.nro_asiento}`;
+    tarifa.textContent = `${json_datos_formulario.tipo_tarifa}`;
+    precio.textContent = `${precio_final} (${json_datos_formulario.tipo_pago})`;
+
+    window.print();
+
+}

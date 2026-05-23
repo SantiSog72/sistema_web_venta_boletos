@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             // obtengo viajes y filtro los que estan vigentes
             $fechaActual = date('Y-m-d');
             $lista_viajes = $instancia -> obtener_viajes ($_POST["dni"]);
-            $lista_viajes_pendientes = $lista_viajes.filter(elemento =>elemento.fecha_viaje >= $fechaActual);
+            $lista_viajes_pendientes = array_filter($lista_viajes, fn($elemento) => $elemento["fecha_viaje"] >= $fechaActual);
 
             
 

@@ -57,7 +57,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 
 <body>
 	<header>
-	<h1>Ingreso Usuario Administrador</h1>
+	<h1>Ingreso Usuario</h1>
 	</header>
 	<section>
 		<article class= "contenedor_formulario">
