@@ -6,7 +6,7 @@ require_once BASE_PATH.'MODELO/libreria_conexionesBD/ConexionBDD.class.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $instancia = ConexionBDD::getInstancia();
-    $usuario_bdd = $instancia->obtener_usuario($_POST['dni']);
+    $usuario_bdd = $instancia->obtener_usuario($_POST['nombre_usuario']);
 
     $json_respuesta = [
         "exito" => false,
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             // obtengo viajes y filtro los que estan vigentes
             $fechaActual = date('Y-m-d');
-            $lista_viajes = $instancia -> obtener_viajes ($_POST["dni"]);
+            $lista_viajes = $instancia -> obtener_viajes ($usuario_bdd["dni"]);
             $lista_viajes_pendientes = array_filter($lista_viajes, fn($elemento) => $elemento["fecha_viaje"] >= $fechaActual);
 
             
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             ];
 
             // si es usuario frecuente
-            if ($instancia -> es_usuario_frecuente ($_POST['dni'])){
+            if ($instancia -> es_usuario_frecuente ($usuario_bdd["dni"])){
                 $json_usuario["es_usuario_frecuente"] = true;
                 $json_usuario["puntos"] = $usuario_bdd['puntos'];
             }

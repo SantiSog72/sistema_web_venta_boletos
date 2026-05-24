@@ -94,13 +94,13 @@ class ConexionBDD {
     }
 
 
-    public function obtener_usuario ($dni_usuario){
+    public function obtener_usuario ($nombre_usuario){
         $consulta = $this -> conexion -> prepare("
             SELECT u.*, uf.puntos
             FROM usuario u LEFT OUTER JOIN usuario_frecuente uf ON u.dni = uf.dni
-            WHERE u.dni = ?
+            WHERE u.nombre_usuario = ?
         ");
-        $consulta -> bind_param("s", $dni_usuario);
+        $consulta -> bind_param("s", $nombre_usuario);
         $consulta -> execute();
         $resultado = $consulta -> get_result();
         $usuario = $resultado -> fetch_assoc();

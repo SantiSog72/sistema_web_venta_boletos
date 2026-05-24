@@ -37,7 +37,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 				
 				if (resultado.exito) {
 					console.log (resultado);
-					
+
 					//guardo si es usuario frecuente, guardo con stringfy recupero con parse
 					localStorage.setItem("es_usuario_frecuente", JSON.stringify(resultado.usuario.es_usuario_frecuente));
 
@@ -69,9 +69,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 				<fieldset class = "fieldset" name="Singin">
 					
 					<span class="form_grupo">
-						<label class ="label" for ="id_dni">DNI: </label>						
-						<input id ="id_dni" type="text" name="dni" placeholder="ingrese su dni" value="12345678" required>
-						<span id="error_dni" class="error"></span>
+						<label class ="label" for ="id_nombre_usuario">nombre usuario:</label>						
+						<input  id ="id_nombre_usuario" type="text" name="nombre_usuario" maxlength="200" placeholder="ingrese nombre de usuario" value ="pepe1990" required>
+						<span id="error_nombre_usuario" class="error"></span>
 					</span>
 				
 					<span class="form_grupo">
