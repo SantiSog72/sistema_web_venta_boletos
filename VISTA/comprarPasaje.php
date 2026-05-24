@@ -198,7 +198,7 @@ $usuario = $_SESSION["usuario"];
                         alert(resultado.mensaje);
 
                         // imprimir pasaje
-                        asignar_valores_a_ocultos_imprimir(datosFormateados);
+                        imprimir_boleto(datosFormateados);
                         // window.print();
                         // ir_paginaRutas();
                     } else {
@@ -239,29 +239,49 @@ $usuario = $_SESSION["usuario"];
 <title>Compra de Boletos</title>
 </head>
 <body> 
-	<header>
-	<h1>Formulario para compra de Boleto</h1>
-    <?php
-        print ("<p>dni usuario: ".$usuario["dni"]."</p>");
-        print ("<p>nombre: ".$usuario["primer_nombre"]."</p>");
-        print ("<p>apellido: ".$usuario["apellido"]."</p>");
-        if ($usuario["es_usuario_frecuente"]){
-            print ("<p>puntos acumulados: ".$usuario["puntos"]."</p>");
-        }
-    ?>
+	<!-- <header>
+        <h1>Formulario para compra de Boleto</h1>
+        <?php
+            // print ("<p>dni usuario: ".$usuario["dni"]."</p>");
+            // print ("<p>nombre: ".$usuario["primer_nombre"]."</p>");
+            // print ("<p>apellido: ".$usuario["apellido"]."</p>");
+            // if ($usuario["es_usuario_frecuente"]){
+            //     print ("<p>puntos acumulados: ".$usuario["puntos"]."</p>");
+            // }
+        ?>
 
-    <nav class="contenedor_mapa">
-		<button id="id_boton_sing_out" class= "boton" onclick="ir_singOut();">Log out</button>
-		<button class= "boton" onclick="ir_historial_compras()">Ver historial de compras</button>
-		<button class= "boton" onclick="ir_paginaRutas()">ver Rutas disponibles</button>
-	</nav>
-	</header>
+        <nav class="contenedor_mapa">
+            <button id="id_boton_sing_out" class= "boton" onclick="ir_singOut();">Log out</button>
+            <button class= "boton" onclick="ir_historial_compras()">Ver historial de compras</button>
+            <button class= "boton" onclick="ir_paginaRutas()">ver Rutas disponibles</button>
+        </nav>
+	</header> -->
+
+    <header>
+    <h1>Formulario para compra de Boleto</h1>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding: 16px 24px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+        <div class="avatar"><?= strtoupper(substr($usuario['primer_nombre'],0,1).substr($usuario['apellido'],0,1)) ?></div>
+        <div>
+            <p style="color:white; font-weight:700; font-size:15px; margin:0;"><?= $usuario['primer_nombre'].' '.$usuario['apellido'] ?></p>
+            <p style="color:#aab; font-size:12px; margin:0;">DNI: <?= $usuario['dni'] ?></p>
+        </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <?php if($usuario['es_usuario_frecuente']): ?>
+        <div class="badge-puntos"><?= $usuario['puntos'] ?> pts</div>
+        <?php endif; ?>
+        <button class="boton boton-outline" onclick="ir_historial_compras()">Historial</button>
+        <button class="boton boton-outline" onclick="ir_paginaRutas()">Rutas</button>
+        <button class="boton boton-danger" onclick="ir_singOut()">Log out</button>
+        </div>
+    </div>
+    </header>
     
     <div class= "contenedor_formulario">
         <form id="id_fomr_compra_boleto" class "formulario" method="post" action="<?= WEB_ROOT ?>CONTROLADOR/ProcesaCompra.php">
             <fieldset id="id_seccion_datos_viaje" class = "fieldset" name="datos viaje">
                 <legend class = "legend" >Ingreso de datos del Viaje</legend>
-                
                 <span class="form_grupo">
                     <label class ="label" for ="id_cod_ruta">codigo de ruta</label>
                     <select class="select" id="id_cod_ruta" name="cod_ruta" size="1" required>
@@ -269,15 +289,42 @@ $usuario = $_SESSION["usuario"];
                     <span id="error_cod_ruta" class="error"></span>
                 </span>
 
-                <span class="form_grupo" id="id_contenedor_datos_ruta">
-                
-                </span>
-
                 <span class="form_grupo">
                     <label class ="label" for ="id_fecha_seleccionada">fecha viaje</label>						
                     <input class="fecha" id ="id_fecha_seleccionada" type="date" name="fecha_viaje" min="2026-5-4" max="2026-12-31" required value="2026-06-30">
                     <span id="error_fecha_viaje" class="error"></span>
                 </span>
+
+                <span class="form_grupo" id="id_contenedor_datos_ruta">
+                    <div class="info-ruta">
+                        <div class="info-ruta-item">
+                            <p class="info-ruta-label">Origen</p>
+                            <p class="info-ruta-valor" id="id_ruta_origen"></p>
+                        </div>
+                        <div class="info-ruta-flecha">→</div>
+                        <div class="info-ruta-item">
+                            <p class="info-ruta-label">Destino</p>
+                            <p class="info-ruta-valor" id="id_ruta_destino"></p>
+                        </div>
+                        <div class="info-ruta-separador"></div>
+                        <div class="info-ruta-item">
+                            <p class="info-ruta-label">Hora salida</p>
+                            <p class="info-ruta-valor" id="id_ruta_hora"></p>
+                        </div>
+                        <div class="info-ruta-separador"></div>
+                        <div class="info-ruta-item">
+                            <p class="info-ruta-label">Tarifa normal</p>
+                            <p class="info-ruta-valor verde" id="id_ruta_tarifa"></p>
+                        </div>
+                        <div class="info-ruta-separador"></div>
+                        <div class="info-ruta-item">
+                            <p class="info-ruta-label">Duración</p>
+                            <p class="info-ruta-valor" id="id_ruta_duracion"></p>
+                        </div>
+                    </div>
+                </span>
+
+                
 
             </fieldset>
 
@@ -435,6 +482,7 @@ $usuario = $_SESSION["usuario"];
                     <p>Tipo Tarifa:<span id="id_tipo_tarifa_asiento_seleccionado"></span></p>
                     <p>Precio Normal:<span id="id_precio_normal_asiento_seleccionado"></span></p>
                     <p>Precio Final Efectivo:<span id="id_precio_final_efectivo_asiento_seleccionado"></span></p>
+                    
                     <?php
                         if ($usuario["es_usuario_frecuente"]){
                     ?>
@@ -473,15 +521,16 @@ $usuario = $_SESSION["usuario"];
             ?>
             <fieldset id="id_seccion_forma_pago" class = "fieldset">
                 <legend class = "legend" >seleccione la forma de pago</legend>
-                <span class="form_grupo">
-                    <p>puntos disponibles:<?php print ($usuario["puntos"]); ?></p>
-                </span>
+                
                 <span class="form_grupo">
                     <input type="radio" name="tipo_pago" value="efectivo" checked>
                     <label class="label">efectivo</label><br>
+                </span>
+                <span class="form_grupo">
                     <input type="radio" name="tipo_pago" value="puntos">
                     <label class="label">puntos</label><br>
                 </span>
+
             </fieldset>
             <?php
             }else{
@@ -494,7 +543,6 @@ $usuario = $_SESSION["usuario"];
                 <legend class = "legend" >acciones</legend>
                 <button id="id_envio" class="boton" type ="submit">Comparar</button>
                 <button id="id_borrar" class="boton" type ="button" onclick = "ir_comprar();">borrar</button>
-                <button id="id_cancelar" class="boton" type ="button" onclick = "asignar_valores_a_ocultos_imprimir();">cancelar</button
             </fieldset>
         </form>
     </div>

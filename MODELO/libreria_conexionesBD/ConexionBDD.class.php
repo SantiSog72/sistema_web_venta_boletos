@@ -59,31 +59,6 @@ class ConexionBDD {
         $resultado->free();
         return $lista_viajes;
     }
- 
-
-    // 
-    
-    // public function existe_viaje ($fecha_viaje, $cod_ruta){
-    //     $consulta = $this -> conexion -> prepare("
-    //     UPDATE alquiler a
-    //     SET a.disponibilidad = 0
-    //     WHERE a.nro_operacion = ?
-    //     ");
-
-    //     $consulta -> bind_param("s", $nro_alquiler);
-    //     $consulta -> execute();
-    // }
-
-    // public function set_disponibilidad_venta ($nro_venta){
-    //     $consulta = $this -> conexion -> prepare("
-    //         UPDATE venta v
-    //         SET v.disponibilidad = 0
-    //         WHERE v.nro_operacion = ?
-    //     ");
-
-    //     $consulta -> bind_param("s", $nro_venta);
-    //     $consulta -> execute();
-    // }
 
     public function obtener_rutas() {
         $consulta = $this->conexion->prepare("
@@ -118,33 +93,6 @@ class ConexionBDD {
         return $lista;
     }
 
-    // public function ingresar_usuario(UsuarioAdministrador $usuario) {
-    //     $consulta = $this->conexion->prepare("
-    //         INSERT INTO usuario_administrador 
-    //         (dni, contrasena, nombre, apellido, nro_celular, email)
-    //         VALUES (?, ?, ?, ?, ?, ?)
-    //     ");
-
-    //     $dni      = $usuario->get_dni();
-    //     $pass     = $usuario->get_contrasena();
-        
-    //     $contacto = $usuario->get_contacto();
-    //     $apellido = $contacto->get_apellido();
-    //     $nombre   = $contacto->get_nombre();
-    //     $celular  = $contacto->getNro_celular();
-    //     $email    = $contacto->getEmail();
-
-    //     $consulta->bind_param("ssssss", 
-    //         $dni, 
-    //         $pass, 
-    //         $nombre, 
-    //         $apellido, 
-    //         $celular, 
-    //         $email
-    //     );
-
-    //     return $consulta->execute();
-    // }
 
     public function obtener_usuario ($dni_usuario){
         $consulta = $this -> conexion -> prepare("

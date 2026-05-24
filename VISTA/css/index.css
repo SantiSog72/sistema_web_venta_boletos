@@ -37,3 +37,24 @@ h1{
 	object-fit: cover;
 	border-radius: 8px;
 }
+
+.avatar {
+    width:44px; height:44px; border-radius:50%;
+    background:#3498db; color:white;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:16px;
+}
+.badge-puntos {
+    background:#f1c40f; color:#7A4F00;
+    padding:6px 14px; border-radius:20px;
+    font-size:12px; font-weight:700;
+}
+.boton-outline {
+    background:transparent; border:1px solid #aab;
+    color:#aab;
+}
+.boton-danger {
+    background:#e74c3c; border:none; color:white;
+}
+
+

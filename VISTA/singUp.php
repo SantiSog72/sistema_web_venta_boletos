@@ -1,6 +1,6 @@
 <?php
 // Esto busca el archivo desde la raíz de tu htdocs/www
-require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_inmobiliario/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
 ?>
 
 <!DOCTYPE html>
@@ -12,30 +12,46 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_inmobiliario/config.php';
 <script>
     window.BASE_URL = "<?= WEB_ROOT ?>";
 </script>
-<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/javascript/botones_hipervinculo.js"></script>
-<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/javascript/libreria_js/ubicador_elementos.js"></script>
-<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/javascript/libreria_js/Validacion.js"></script>
-<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/javascript/Validador_registro.js"></script> 
+<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/botones_hipervinculo.js"></script>
+<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/ubicador_elementos.js"></script>
+<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/Validacion.js"></script>
+<script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/Validador_registro.js"></script> 
 
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/index.css">
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/formulario_estilos.css">
 
-<!-- <script>
+<script>
     document.addEventListener('DOMContentLoaded', function (){
         const fomrulario_registro = document.getElementById("id_fomr_registro");
         
         fomrulario_registro.addEventListener('submit', async function(evento){
             evento.preventDefault();
-            
-            const datos = new FormData(fomrulario_registro);
-            const url = 'CONTROLADOR/ProcesaRegistroUsuario.php';
-            
+			if (validar_datos()){
+				const datos = new FormData(fomrulario_registro);
 
-
-            //realizar validacion
+				try {
+                    const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/ProcesaRegistroUsuario.php', {
+                        method: 'POST',
+                        body: datos
+                    });
+    
+                    const resultado = await respuesta.json();
+                    console.log(resultado);
+    
+                    if (resultado.exito) {
+                        alert(resultado.mensaje);
+						ir_singIn();
+                    } else {
+                        alert("Error: " + resultado.mensaje);
+                    }
+                } catch (error) {
+                    // atrapar los errores duplocados
+                    console.error("Error en la conexión:", error);
+                }
+			}
         })
     })
-</script> -->
+</script>
 
 <title>Sing Up</title>
 </head>
@@ -46,14 +62,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_inmobiliario/config.php';
 	</header>
 	<section>
 		<article class= "contenedor_formulario">
-			<form id="id_fomr_registro" class "formulario" method="post" action="<?= WEB_ROOT ?>CONTROLADOR/ProcesaRegistroUsuario.php">
+			<form id="id_fomr_registro" class="formulario" method="post">
 				<fieldset class = "fieldset" name="datos sesion">
 					<legend class = "legend" >Ingreso Datos de Sesion</legend>
 					
 					<span class="form_grupo">
-						<label class ="label" for ="id_dni">DNI: </label>						
-						<input id ="id_dni" type="text" name="dni" placeholder="ingrese su dni" value="">
-						<span id="error_dni" class="error"></span>
+						<label class ="label" for ="id_nombre_usuario">nombre usuario:</label>						
+						<input  id ="id_nombre_usuario" type="text" name="nombre_usuario" maxlength="20" placeholder="ingrese nombre de usuario" value ="">
+						<span id="error_nombre_usuario" class="error"></span>
 					</span>
 
 					<span class="form_grupo">
@@ -61,18 +77,38 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_inmobiliario/config.php';
 						<input onblur ="" id ="id_contraseña" type="password" name="contrasena" maxlength="20" placeholder="ingrese su contraseña" value="">
 						<span id="error_contraseña" class="error"></span>
 					</span>
+					
+					<span class="contenedor_checkbox_radio">
+						<input id="id_usuario_frecuente" type ="checkbox" name="usuario_frecuente" value="1">
+						<label for="id_usuario_frecuente" class="label">quiero ser usuario frecuente</label>
+					</span>	
+
 				</fieldset>
 
 				<fieldset class = "fieldset" name="datos personales">
 					<legend class = "legend" >Ingreso Datos Personales</legend>
+
+					<span class="form_grupo">
+						<label class ="label" for ="id_dni">DNI: </label>						
+						<input id ="id_dni" type="text" name="dni" placeholder="ingrese su dni" value="">
+						<span id="error_dni" class="error"></span>
+					</span>
+
 					<span class="form_grupo">
 						<label class ="label" for ="id_nombre">nombre:</label>						
-						<input  onblur="" id ="id_nombre" type="text" name="nombre" maxlength="20" placeholder="ingrese su nombre" value ="">
+						<input  id ="id_nombre" type="text" name="nombre" maxlength="20" placeholder="ingrese su nombre" value ="">
 						<span id="error_nombre" class="error"></span>
 					</span>
+
+					<span class="form_grupo">
+						<label class ="label" for ="id_segundo_nombre">Segundo nombre:</label>						
+						<input  id ="id_segundo_nombre" type="text" name="segundo_nombre" maxlength="20" placeholder="ingrese su segundo nombre" value ="">
+						<span id="error_segundo_nombre" class="error"></span>
+					</span>
+
 					<span class="form_grupo">
 						<label class ="label" for ="id_apellido">apellido:</label>						
-						<input onblur="" id ="id_apellido" type="text" name="apellido" maxlength="20" placeholder="ingrese su apellido" value="">
+						<input id ="id_apellido" type="text" name="apellido" maxlength="20" placeholder="ingrese su apellido" value="">
 						<span id="error_apellido" class="error"></span>
 					</span>
 				</fieldset>
@@ -93,10 +129,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_inmobiliario/config.php';
                         <span id="error_numero_cel" class="error"></span>
                     </span>
                 </fieldset>
-				
+
+
 				<fieldset class = "fieldset field_acciones" name="acciones_botones">
 					<legend class = "legend" >acciones</legend>
-					<button id="id_envio" class="boton" type ="button" onclick = "enviar_formulario();">Registrase</button>
+					<button id="id_envio" class="boton" type ="submit">Registrase</button>
 					<button id="id_borrar" class="boton" type ="button" onclick = "borrar();">borrar</button>
 					<button id="id_cancelar" class="boton" type ="button" onclick = "cancelar();">cancelar</button>
 				</fieldset>

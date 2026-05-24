@@ -98,19 +98,23 @@ $usuario = $_SESSION["usuario"];
 <body> 
 	<header>
 	<h1>Venta de Boletos para Terminal de Colectivos</h1>
-	<?php
-        print ("<p>dni usuario: ".$usuario["dni"]."</p>");
-        print ("<p>nombre: ".$usuario["primer_nombre"]."</p>");
-        print ("<p>apellido: ".$usuario["apellido"]."</p>");
-        if ($usuario["es_usuario_frecuente"]){
-            print ("<p>puntos acumulados: ".$usuario["puntos"]."</p>");
-        }
-    ?>
-	<nav class="contenedor_mapa">
-		<button id="id_boton_sing_out" class= "boton" onclick="ir_singOut();">Log out</button>
-		<button class= "boton" onclick="ir_comprar()">Comprar Boleto</button>
-		<button class= "boton" onclick="ir_historial_compras()">Ver historial de compras</button>
-	</nav>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding: 16px 24px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+        <div class="avatar"><?= strtoupper(substr($usuario['primer_nombre'],0,1).substr($usuario['apellido'],0,1)) ?></div>
+        <div>
+            <p style="color:white; font-weight:700; font-size:15px; margin:0;"><?= $usuario['primer_nombre'].' '.$usuario['apellido'] ?></p>
+            <p style="color:#aab; font-size:12px; margin:0;">DNI: <?= $usuario['dni'] ?></p>
+        </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <?php if($usuario['es_usuario_frecuente']): ?>
+        <div class="badge-puntos"><?= $usuario['puntos'] ?> pts</div>
+        <?php endif; ?>
+        <button class="boton boton-outline" onclick="ir_historial_compras()">Historial</button>
+        <button class="boton boton-danger" onclick="ir_comprar()">Comprar Boleto</button>
+        <button class="boton boton-danger" onclick="ir_singOut()">Log out</button>
+        </div>
+    </div>
 
 	<p>Tipo de Usuario</p>
 	<span class="">

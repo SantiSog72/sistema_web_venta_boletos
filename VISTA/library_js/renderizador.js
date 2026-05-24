@@ -41,21 +41,33 @@ function renderizarTablaRutaJSON(lista_rutas) {
     contenedor.appendChild(tabla);
 }
 
-function renderizar_info_ruta_seleccionada (cod_ruta_seleccionado, listaRutas){
-    const contenedor_datos_ruta = document.getElementById("id_contenedor_datos_ruta");
+// function renderizar_info_ruta_seleccionada (cod_ruta_seleccionado, listaRutas){
+//     const contenedor_datos_ruta = document.getElementById("id_contenedor_datos_ruta");
     
-    limpiar_contenedor ("id_contenedor_datos_ruta");
-    let ruta_elegida = listaRutas.find(element => element.cod_ruta == cod_ruta_seleccionado);
+//     limpiar_contenedor ("id_contenedor_datos_ruta");
+//     let ruta_elegida = listaRutas.find(element => element.cod_ruta == cod_ruta_seleccionado);
 
-    let html_info_ruta =`
-    <strong>Ruta Seleccionada</strong>
-    <p>origen: ${ruta_elegida.lugar_origen}</p>
-    <p>destino:${ruta_elegida.lugar_destino}</p>
-    <p>tarifa normal:${ruta_elegida.tarifa_normal}</p>
-    <p>hora salida:${ruta_elegida.hora_salida}</p>
-    `;
+//     let html_info_ruta =`
+//     <strong>Ruta Seleccionada</strong>
+//     <p>origen: ${ruta_elegida.lugar_origen}</p>
+//     <p>destino:${ruta_elegida.lugar_destino}</p>
+//     <p>tarifa normal:${ruta_elegida.tarifa_normal}</p>
+//     <p>hora salida:${ruta_elegida.hora_salida}</p>
+//     `;
 
-    contenedor_datos_ruta.innerHTML = html_info_ruta;
+//     contenedor_datos_ruta.innerHTML = html_info_ruta;
+// }
+
+
+function renderizar_info_ruta_seleccionada(cod_ruta, listaRutas) {
+    const ruta = listaRutas.find(r => r.cod_ruta === cod_ruta);
+    if (!ruta) return;
+
+    document.getElementById("id_ruta_origen").textContent   = ruta.lugar_origen;
+    document.getElementById("id_ruta_destino").textContent  = ruta.lugar_destino;
+    document.getElementById("id_ruta_hora").textContent     = ruta.hora_salida;
+    document.getElementById("id_ruta_tarifa").textContent   = "$" + parseInt(ruta.tarifa_normal).toLocaleString("es-AR");
+    document.getElementById("id_ruta_duracion").textContent = ruta.duracion + " hs";
 }
 
 
@@ -448,7 +460,7 @@ function resetear_mapa (){
 //     contenedor.innerHTML = html_botones;
 // }
 
-function asignar_valores_a_ocultos_imprimir (json_datos_formulario){
+function imprimir_boleto (json_datos_formulario){
 
     const nro_boleto = document.getElementById("id_print_nro_boleto");
     const pasajero = document.getElementById("id_print_pasajero");
@@ -488,8 +500,8 @@ function asignar_valores_a_ocultos_imprimir (json_datos_formulario){
     }
 
     pasajero.textContent = `DNI: ${json_datos_formulario.dni}, Nombre y Apellido: ${json_datos_formulario.nombre} ${json_datos_formulario.apellido}`;
-    dni_usuario.textContent = `BDD`;
-    nro_boleto.textContent = `BDD`;
+    // dni_usuario.textContent = `dni_usuario`;
+    // nro_boleto.textContent = `BDD`;
     origen.textContent = `${ruta_seleccionada.lugar_origen}`;
     destino.textContent = `${ruta_seleccionada.lugar_destino}`;
     hora.textContent = `${ruta_seleccionada.hora_salida}`;
