@@ -57,6 +57,8 @@ function ventana_bienvenida_viajes (json_datos){
     const usuario = json_datos.usuario;
     const viajes_pendientes = json_datos.viajes_pendientes;
 
+    // console.log(viajes_pendientes);
+
     let contenedor_info_viajes = document.createElement("div");
     contenedor_info_viajes.setAttribute("id", "id_contenedor_info_viajes");
 

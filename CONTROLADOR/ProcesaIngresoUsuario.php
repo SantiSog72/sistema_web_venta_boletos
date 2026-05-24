@@ -21,7 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             // obtengo viajes y filtro los que estan vigentes
             $fechaActual = date('Y-m-d');
             $lista_viajes = $instancia -> obtener_viajes ($usuario_bdd["dni"]);
-            $lista_viajes_pendientes = array_filter($lista_viajes, fn($elemento) => $elemento["fecha_viaje"] >= $fechaActual);
+            $lista_viajes_pendientes = [];
+            // lo filtra como tipo objeto
+            $filtrados = array_filter($lista_viajes, fn($elemento) => $elemento["fecha_viaje"] >= $fechaActual);
+            // convierte ese objeto en un array
+            $lista_viajes_pendientes = array_values($filtrados);
 
             
 

@@ -70,13 +70,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 					
 					<span class="form_grupo">
 						<label class ="label" for ="id_nombre_usuario">nombre usuario:</label>						
-						<input  id ="id_nombre_usuario" type="text" name="nombre_usuario" maxlength="200" placeholder="ingrese nombre de usuario" value ="pepe1990" required>
+						<input  id ="id_nombre_usuario" type="text" name="nombre_usuario" maxlength="200" placeholder="ingrese nombre de usuario" value ="usuario1" required>
 						<span id="error_nombre_usuario" class="error"></span>
 					</span>
 				
 					<span class="form_grupo">
 						<label class ="label" for ="id_contraseña">Contraseña: </label>
-						<input id ="id_contraseña" type="password" name="contrasena" maxlength="20" placeholder="ingrese su contraseña" value="12345678" required>
+						<input id ="id_contraseña" type="password" name="contrasena" maxlength="20" placeholder="ingrese su contraseña" value="11111111" required>
 						<span id="error_contraseña" class="error"></span>
 					</span>
 				</fieldset>
