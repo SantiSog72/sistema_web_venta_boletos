@@ -105,6 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     }else{
         $consulta_ingresa_pasajero->execute();
         $consulta_ingresa_boleto->execute();
+        $id_boleto = $conexion->insert_id;
         if ($es_usuario_frecuente){
             $consulta_puntos->execute();
             $_SESSION["usuario"]["puntos"] = $instancia ->obtener_puntos_usuario($dni_usuario);
@@ -112,7 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         $json_respuesta = [
         "exito" => true,
-        "mensaje" => "El boleto se registro correctamente"
+        "mensaje" => "El boleto se registro correctamente",
+        "id_boleto" => $id_boleto,
+        "dni_usuario" => $_SESSION["usuario"]["dni"]
         ];
     }
 

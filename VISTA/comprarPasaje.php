@@ -198,8 +198,8 @@ $usuario = $_SESSION["usuario"];
                         alert(resultado.mensaje);
 
                         // imprimir pasaje
-                        imprimir_boleto(datosFormateados);
-                        ir_paginaRutas();
+                        imprimir_boleto(datosFormateados, resultado.dni_usuario, resultado.id_boleto);
+                        // ir_paginaRutas();
                     } else {
                         alert("Error: " + resultado.mensaje);
                     }

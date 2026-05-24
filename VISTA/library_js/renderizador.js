@@ -460,7 +460,7 @@ function resetear_mapa (){
 //     contenedor.innerHTML = html_botones;
 // }
 
-function imprimir_boleto (json_datos_formulario){
+function imprimir_boleto (json_datos_formulario, dni_usuario_str, nro_boleto_str){
 
     const nro_boleto = document.getElementById("id_print_nro_boleto");
     const pasajero = document.getElementById("id_print_pasajero");
@@ -500,8 +500,8 @@ function imprimir_boleto (json_datos_formulario){
     }
 
     pasajero.textContent = `DNI: ${json_datos_formulario.dni}, Nombre y Apellido: ${json_datos_formulario.nombre} ${json_datos_formulario.apellido}`;
-    // dni_usuario.textContent = `dni_usuario`;
-    // nro_boleto.textContent = `BDD`;
+    // dni_usuario.textContent = dni_usuario_str;
+    // nro_boleto.textContent = nro_boleto_str;
     origen.textContent = `${ruta_seleccionada.lugar_origen}`;
     destino.textContent = `${ruta_seleccionada.lugar_destino}`;
     hora.textContent = `${ruta_seleccionada.hora_salida}`;
