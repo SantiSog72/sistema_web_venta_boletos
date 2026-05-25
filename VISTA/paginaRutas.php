@@ -19,6 +19,7 @@ $usuario = $_SESSION["usuario"];
 <script type="text/javascript" src ="<?= WEB_ROOT ?>VISTA/library_js/renderizador.js"></script>
 
 
+
 <script>
 	document.addEventListener('DOMContentLoaded', function () {//DOMContentLoaded: evento que se produce al cargar la pagina
 	boton_sing_out = document.getElementById("id_boton_sing_out");

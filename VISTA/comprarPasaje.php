@@ -17,6 +17,7 @@ $usuario = $_SESSION["usuario"];
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/formulario_estilos.css">
 <link rel="stylesheet" href="<?= WEB_ROOT ?>VISTA/css/mapa_colectivo.css">
 
+
 <script>
     window.BASE_URL = "<?= WEB_ROOT ?>";
 </script>
@@ -108,8 +109,8 @@ $usuario = $_SESSION["usuario"];
             // si se clickea a un elemento que contiene en su lista de clases al aasiento
             if (evento.target.classList.contains("asiento")){
                 const hidden_nro_asiento = document.getElementById("id_nro_asiento");
-                const hidden_precio_final_efectivo = document.getElementById("id_precio_final_efectivo");
-                const hidden_tipo_tarifa = document.getElementById("id_tipo_tarifa");
+                // const hidden_precio_final_efectivo = document.getElementById("id_precio_final_efectivo");
+                // const hidden_tipo_tarifa = document.getElementById("id_tipo_tarifa");
                 const asiento_seleccionado =  parseInt(evento.target.textContent);
                 hidden_nro_asiento.value = asiento_seleccionado;
                 
@@ -156,19 +157,19 @@ $usuario = $_SESSION["usuario"];
 
                 if (es_usuario_frecuente){
                     const precio_final_puntos_selec = document.getElementById("id_precio_final_puntos_asiento_seleccionado");
-                    const hidden_precio_final_puntos = document.getElementById("id_precio_final_puntos");
-                    const hidden_suma_puntos = document.getElementById("id_suma_puntos");
+                    // const hidden_precio_final_puntos = document.getElementById("id_precio_final_puntos");
+                    // const hidden_suma_puntos = document.getElementById("id_suma_puntos");
 
                     precio_final_puntos_selec.textContent = resultado.precio_final_puntos;
-                    hidden_precio_final_puntos.value = resultado.precio_final_puntos;
-                    hidden_suma_puntos.value = resultado.suma_puntos;
+                    // hidden_precio_final_puntos.value = resultado.precio_final_puntos;
+                    // hidden_suma_puntos.value = resultado.suma_puntos;
                 }
 
                 
 
                 // envia los precios en un input hide
-                hidden_tipo_tarifa.value = resultado.tipoTarifa;
-                hidden_precio_final_efectivo.value = resultado.precio_final_efectivo;
+                // hidden_tipo_tarifa.value = resultado.tipoTarifa;
+                // hidden_precio_final_efectivo.value = resultado.precio_final_efectivo;
 
             }
 
@@ -192,7 +193,7 @@ $usuario = $_SESSION["usuario"];
                     });
     
                     const resultado = await respuesta.json();
-                    // console.log(resultado);
+                    console.log(resultado);
     
                     if (resultado.exito) {
                         alert(resultado.mensaje);
@@ -471,8 +472,8 @@ $usuario = $_SESSION["usuario"];
                 </div>
 
                 <span class="form_grupo" id="id_contenedor_datos_asiento_seleccionado">
-                    <input id="id_tipo_tarifa" type="hidden" name="tipo_tarifa" value="">
-                    <input id="id_precio_final_efectivo" type="hidden" name="precio_final_efectivo" value="">
+                    <!-- <input id="id_tipo_tarifa" type="hidden" name="tipo_tarifa" value=""> -->
+                    <!-- <input id="id_precio_final_efectivo" type="hidden" name="precio_final_efectivo" value=""> -->
                     <span id="error_seleccion_asiento" class="error"></span>
                     <p>Tipo Tarifa:<span id="id_tipo_tarifa_asiento_seleccionado"></span></p>
                     <p>Precio Normal:<span id="id_precio_normal_asiento_seleccionado"></span></p>
@@ -482,8 +483,8 @@ $usuario = $_SESSION["usuario"];
                         if ($usuario["es_usuario_frecuente"]){
                     ?>
                     <p>Precio Final Puntos:<span id="id_precio_final_puntos_asiento_seleccionado"></span></p>
-                    <input id="id_precio_final_puntos" type="hidden" name="precio_final_puntos" value="">
-                    <input id="id_suma_puntos" type="hidden" name="suma_puntos" value="0">
+                    <!-- <input id="id_precio_final_puntos" type="hidden" name="precio_final_puntos" value=""> -->
+                    <!-- <input id="id_suma_puntos" type="hidden" name="suma_puntos" value="0"> -->
                     <?php
                         }
                     ?>

@@ -22,7 +22,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
         formulario_ingreso.addEventListener('submit', async function(evento) {
 			evento.preventDefault(); 
 
-			// if ()
 
 			const datos = new FormData(formulario_ingreso);
 

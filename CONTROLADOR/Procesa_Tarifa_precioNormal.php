@@ -72,6 +72,9 @@ if ($fila = $resultado -> fetch_assoc()){
         
     $json_respuesta["precio_final_puntos"] = $json_respuesta["precio_final_efectivo"]*(250/100);
 }
+// guardo los precios en el arreglo session para luego usarlos en el envio del formulario
+$_SESSION["precios"] = $json_respuesta;
+
 $resultado->free();
 header('Content-Type: application/json');
 echo json_encode($json_respuesta);

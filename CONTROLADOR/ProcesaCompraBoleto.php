@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $es_usuario_frecuente = $_SESSION["usuario"]["es_usuario_frecuente"];
 
     
-    $precio_final = $_POST['precio_final_efectivo'];
+    $precio_final = $_SESSION["precios"]["precio_final_efectivo"];
 
     // manejo de puntos con usuario frecuente
     if ($es_usuario_frecuente){
@@ -36,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 SET puntos = puntos + ? 
                 WHERE dni = ?
             ");
-            $cantidad_puntos_a_operar = $_POST["suma_puntos"];
+            $cantidad_puntos_a_operar = $_SESSION["precios"]["suma_puntos"];
         }else{
             // unico caso en el que no se paga en efectivo
-            $precio_final = $_POST['precio_final_puntos'];
+            $precio_final = $_SESSION["precios"]["precio_final_puntos"];
 
             // restar_puntos
             $consulta_puntos = $conexion->prepare("
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 SET puntos = puntos - ? 
                 WHERE dni = ?
             ");
-            $cantidad_puntos_a_operar = $_POST["precio_final_puntos"];
+            $cantidad_puntos_a_operar = $_SESSION["precios"]["precio_final_puntos"];
         }
         $consulta_puntos -> bind_param("is",
             $cantidad_puntos_a_operar,
@@ -68,7 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $_POST['fecha_viaje'],
         $_POST['cod_ruta'],
         $_POST['nro_asiento'],
-        $_POST['tipo_tarifa'],
+        $_SESSION["precios"]["tipoTarifa"],
+        // $_POST['tipo_tarifa'],
         $precio_final,
         $dni_usuario,
         $_POST['dni'],
