@@ -2,12 +2,6 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php';
 // se puede usar el BASE_PATH al ingresar y tomar las fotos url
 
-require_once BASE_PATH.'MODELO/Asiento.class.php';
-require_once BASE_PATH.'MODELO/Boleto.class.php';
-require_once BASE_PATH.'MODELO/Pasajero.class.php';
-require_once BASE_PATH.'MODELO/Ruta.class.php';
-require_once BASE_PATH.'MODELO/Usuario.class.php';
-require_once BASE_PATH.'MODELO/Usuario_frecuente.class.php';
 
 class ConexionBDD {
     // singleton
@@ -77,21 +71,21 @@ class ConexionBDD {
     }
 
 
-    public function obtener_viaje($fecha_viaje, $cod_ruta) {
-        $consulta = $this->conexion->prepare("
-            SELECT * FROM `ruta` r WHERE 1
-            ORDER BY r.lugar_origen, r.lugar_destino
-        ");
-        $consulta->execute();
-        $resultado = $consulta->get_result();
-        $lista = [];
-        while ($fila = $resultado->fetch_assoc()) {
-            $lista[] = $fila;
-        }
+    // public function obtener_viaje($fecha_viaje, $cod_ruta) {
+    //     $consulta = $this->conexion->prepare("
+    //         SELECT * FROM `ruta` r WHERE 1
+    //         ORDER BY r.lugar_origen, r.lugar_destino
+    //     ");
+    //     $consulta->execute();
+    //     $resultado = $consulta->get_result();
+    //     $lista = [];
+    //     while ($fila = $resultado->fetch_assoc()) {
+    //         $lista[] = $fila;
+    //     }
 
-        $resultado->free();
-        return $lista;
-    }
+    //     $resultado->free();
+    //     return $lista;
+    // }
 
 
     public function obtener_usuario ($nombre_usuario){

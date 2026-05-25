@@ -24,11 +24,6 @@ $usuario = $_SESSION["usuario"];
 	boton_sing_out = document.getElementById("id_boton_sing_out");
 	const radios = document.querySelectorAll('input[name="tipo_usuario"]');
 
-	// const radio_usuario_frecuente = document.getElementById("id_radio_usuario_frecuente");
-	// const radio_usuario_comun = document.getElementById("id_radio_usuario_comun");
-	// if (JSON.parse (localStorage.getItem("es_usuario_frecuente"))){
-	// 	radio_usuario_frecuente.checked;
-	// }
 
 	async function cargarRutas() {
 		try {
@@ -44,15 +39,9 @@ $usuario = $_SESSION["usuario"];
 				console.error("Error al cargar las rutas:", error);
 				contenedor.innerHTML = "<p>Error al cargar los datos.</p>";
 			}
-		}
+	}
 	cargarRutas(); 
 
-
-	// boton_sing_out.addEventListener("click", function(){
-	// 	//desloguearse
-	// 	localStorage.clear();
-	// 	ir_singIn();
-	// });
 
 	radios.forEach(radio => {
 		radio.addEventListener('change', async function() {
@@ -75,15 +64,6 @@ $usuario = $_SESSION["usuario"];
 			}
 		});
 	});
-
-
-
-
-	
-
-
-
-
 	});
 
 </script>

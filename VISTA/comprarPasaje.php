@@ -90,7 +90,7 @@ $usuario = $_SESSION["usuario"];
                         body: datos
                 });
                 let lista_asientos_ocupados = await respuesta.json();
-                console.log (lista_asientos_ocupados);
+                // console.log (lista_asientos_ocupados);
 
                 resetear_mapa();
 
@@ -146,7 +146,7 @@ $usuario = $_SESSION["usuario"];
                 let resultado = await respuesta.json();
 
                 // convierte en sqring para guardarlo en el local storage
-                localStorage.setItem("precios", JSON.stringify(resultado));
+                // localStorage.setItem("precios", JSON.stringify(resultado));
 
 
                 // muestra los precios
@@ -181,7 +181,7 @@ $usuario = $_SESSION["usuario"];
                 const datos = new FormData(formulario);
 
                 const datosFormateados = Object.fromEntries(datos.entries());
-                console.log("Datos del formulario:", datosFormateados);
+                // console.log(datosFormateados);
 
 
                 try {
@@ -192,14 +192,14 @@ $usuario = $_SESSION["usuario"];
                     });
     
                     const resultado = await respuesta.json();
-                    console.log(resultado);
+                    // console.log(resultado);
     
                     if (resultado.exito) {
                         alert(resultado.mensaje);
 
                         // imprimir pasaje
                         imprimir_boleto(datosFormateados, resultado.dni_usuario, resultado.id_boleto);
-                        // ir_paginaRutas();
+                        ir_paginaRutas();
                     } else {
                         alert("Error: " + resultado.mensaje);
                     }
@@ -218,16 +218,12 @@ $usuario = $_SESSION["usuario"];
         // para que se actualice el viaje al cambiar la ruta o la fecha
         fecha_seleccionada.addEventListener("change", async function(){
             actualizar_viaje();
-            // div_anterior = "";
-            // str_clases = "";
         });
 
         // la info de la ruta solo cambia al cambiar la ruta (no la fecha)
         select_rutas.addEventListener("change", async function(){
             renderizar_info_ruta_seleccionada (this.value, listaRutas);
             actualizar_viaje();
-            // div_anterior = "";
-            // str_clases = "";
         });
 	});
 
@@ -278,7 +274,7 @@ $usuario = $_SESSION["usuario"];
     </header>
     
     <div class= "contenedor_formulario">
-        <form id="id_fomr_compra_boleto" class "formulario" method="post" action="<?= WEB_ROOT ?>CONTROLADOR/ProcesaCompra.php">
+        <form id="id_fomr_compra_boleto" class ="formulario" method="post" action="<?= WEB_ROOT ?>CONTROLADOR/ProcesaCompra.php">
             <fieldset id="id_seccion_datos_viaje" class = "fieldset" name="datos viaje">
                 <legend class = "legend" >Ingreso de datos del Viaje</legend>
                 <span class="form_grupo">
@@ -554,9 +550,7 @@ $usuario = $_SESSION["usuario"];
 
     <div id="id_boleto_imprimible">
         <h2>Boleto de Viaje</h2>
-        <p><strong>Nro boleto:</strong> <span id="id_print_nro_boleto"></span></p>
         <p><strong>Pasajero:</strong> <span id="id_print_pasajero"></span></p>
-        <p><strong>DNI:</strong> <span id="id_print_dni"></span></p>
         <p><strong>Origen:</strong> <span id="id_print_origen"></span></p>
         <p><strong>Destino:</strong> <span id="id_print_destino"></span></p>
         <p><strong>Fecha:</strong> <span id="id_print_fecha"></span></p>

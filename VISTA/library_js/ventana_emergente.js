@@ -71,7 +71,8 @@ function ventana_bienvenida_viajes (json_datos){
     `;
 
     let mensaje_bienvenida= document.createElement("p");
-    mensaje_bienvenida.innerHTML = `Bienvenido:${usuario.primer_nombre} ${usuario.apellido}`;
+    mensaje_bienvenida.innerHTML = `Bienvenido: ${usuario.primer_nombre} ${usuario.apellido}`;
+    mensaje_bienvenida.setAttribute("style", "text-transform: capitalize;");
 
     
 

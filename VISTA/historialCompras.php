@@ -41,7 +41,7 @@ $usuario = $_SESSION["usuario"];
                         <th>tipo tarifa</th>
                         <th>Numero Asiento</th>
                         <th>Tipo Moneda</th>
-                        <th>Precio Total</th>
+                        <th>Precio Final</th>
                         <th>DNI Pasajero</th>
                     </tr>
                 `;

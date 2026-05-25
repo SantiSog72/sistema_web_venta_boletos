@@ -7,7 +7,7 @@ function borrar (){
 
 function cancelar (){
 	borrar();
-	ir_index();
+	ir_singIn();
 }
 
 
