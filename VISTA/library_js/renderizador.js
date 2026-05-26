@@ -224,7 +224,7 @@ function imprimir_boleto (json_datos_formulario, dni_usuario_str, nro_boleto_str
 
 
     const es_usuario_frecuente = JSON.parse (localStorage.getItem("es_usuario_frecuente"));
-    // const precios = JSON.parse (localStorage.getItem("precios"));
+    const precios = JSON.parse (localStorage.getItem("precios"));
     const rutas = JSON.parse (localStorage.getItem("Rutas_disponibles"));
 
     
@@ -239,11 +239,11 @@ function imprimir_boleto (json_datos_formulario, dni_usuario_str, nro_boleto_str
     let precio_final = ""
     switch (json_datos_formulario.tipo_pago) {
         case "efectivo":
-            precio_final = json_datos_formulario.precio_final_efectivo;
+            precio_final = precios.precio_final_efectivo;
             break;
 
         default:
-            precio_final = json_datos_formulario.precio_final_puntos;
+            precio_final = precios.precio_final_puntos;
             break;
     }
 
@@ -255,7 +255,7 @@ function imprimir_boleto (json_datos_formulario, dni_usuario_str, nro_boleto_str
     hora.textContent = `${ruta_seleccionada.hora_salida}`;
     fecha.textContent = `${json_datos_formulario.fecha_viaje}`;
     asiento.textContent = `${json_datos_formulario.nro_asiento}`;
-    tarifa.textContent = `${json_datos_formulario.tipo_tarifa}`;
+    tarifa.textContent = `${precios.tipoTarifa}`;
     precio.textContent = `${precio_final} (${json_datos_formulario.tipo_pago})`;
 
     window.print();

@@ -147,7 +147,7 @@ $usuario = $_SESSION["usuario"];
                 let resultado = await respuesta.json();
 
                 // convierte en sqring para guardarlo en el local storage
-                // localStorage.setItem("precios", JSON.stringify(resultado));
+                localStorage.setItem("precios", JSON.stringify(resultado));
 
 
                 // muestra los precios
@@ -193,7 +193,7 @@ $usuario = $_SESSION["usuario"];
                     });
     
                     const resultado = await respuesta.json();
-                    console.log(resultado);
+                    // console.log(resultado);
     
                     if (resultado.exito) {
                         alert(resultado.mensaje);
