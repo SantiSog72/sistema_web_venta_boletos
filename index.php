@@ -26,7 +26,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/sistema_web_venta_boletos/config.php'
 			const datos = new FormData(formulario_ingreso);
 
 			try {
-				const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/ProcesaingresoUsuario.php', {
+				const respuesta = await fetch('<?= WEB_ROOT ?>CONTROLADOR/ProcesaIngresoUsuario.php', {
 					method: 'POST',
 					body: datos
 				});
